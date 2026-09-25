@@ -7,11 +7,9 @@ import { useShop } from '@/context/ShopContext';
 import ProductCard from '@/components/ProductCard';
 import { 
   ShieldCheck, 
-  Truck, 
   RotateCcw, 
   CheckCircle2, 
   MapPin, 
-  ShoppingCart, 
   Zap, 
   Star, 
   ChevronRight,
@@ -20,7 +18,9 @@ import {
   Wrench,
   Check,
   Clock,
-  PhoneCall
+  PhoneCall,
+  MessageSquare,
+  Store
 } from 'lucide-react';
 
 import { INITIAL_PRODUCTS, AVAILABLE_SHOWROOM_TEMPLATES } from '@/lib/initialData';
@@ -28,7 +28,7 @@ import { INITIAL_PRODUCTS, AVAILABLE_SHOWROOM_TEMPLATES } from '@/lib/initialDat
 export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const router = useRouter();
-  const { products, addToCart, setIsCartOpen, userPincode, checkDelivery, showToast } = useShop();
+  const { products, shopSettings, showToast } = useShop();
 
   const product = products.find(p => p.id === resolvedParams.id) 
     || INITIAL_PRODUCTS.find(p => p.id === resolvedParams.id) 
@@ -37,9 +37,6 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
     || INITIAL_PRODUCTS[0];
 
   const [selectedImage, setSelectedImage] = useState<string>(product?.images?.[0] || product?.image || '');
-  const [quantity, setQuantity] = useState<number>(1);
-  const [checkPin, setCheckPin] = useState<string>(userPincode);
-  const [pinResult, setPinResult] = useState<{ available: boolean; workbenchRepairAvailable: boolean; message: string } | null>(null);
   const [activeTab, setActiveTab] = useState<'specs' | 'condition' | 'reviews'>('specs');
 
   if (!product) {
@@ -52,21 +49,6 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
       </div>
     );
   }
-
-  const handleAddToCart = () => {
-    addToCart(product, quantity);
-    setIsCartOpen(true);
-  };
-
-  const handleBuyNow = () => {
-    addToCart(product, quantity);
-    router.push('/checkout');
-  };
-
-  const handleCheckDelivery = (e: React.FormEvent) => {
-    e.preventDefault();
-    setPinResult(checkDelivery(checkPin));
-  };
 
   const handleShare = () => {
     if (typeof window !== 'undefined') {
@@ -135,8 +117,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                 <span>7 Days Replacement</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Truck size={18} style={{ color: '#d97706' }} />
-                <span>Insured Delivery or Store Pickup</span>
+                <CheckCircle2 size={18} style={{ color: '#d97706' }} />
+                <span>Showroom Live Testing & Demo</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Wrench size={18} style={{ color: '#7c3aed' }} />
@@ -179,12 +161,12 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
             </span>
 
             {product.stock > 0 ? (
-              <span style={{ color: 'var(--success)', fontWeight: 700, fontSize: '0.85rem' }}>
-                ● In Stock ({product.stock} units left)
+              <span style={{ color: 'var(--success)', fontWeight: 700, fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Store size={15} /> Available in Showroom ({product.stock} units left)
               </span>
             ) : (
               <span style={{ color: 'var(--danger)', fontWeight: 700, fontSize: '0.85rem' }}>
-                ● Out of Stock
+                ● Out of Stock at Store
               </span>
             )}
           </div>
@@ -223,85 +205,99 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
             </ul>
           </div>
 
-          {/* Delivery & Store Pickup Checker */}
-          <div className="product-delivery-info">
-            <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--gray-700)', marginBottom: '8px' }}>
-              Check Delivery & Store Pickup:
-            </div>
-            <form onSubmit={handleCheckDelivery} className="delivery-check">
-              <input 
-                type="text" 
-                placeholder="Enter 6-digit Pincode" 
-                maxLength={6}
-                value={checkPin}
-                onChange={(e) => setCheckPin(e.target.value.replace(/\D/g, ''))}
-              />
-              <button type="submit">Verify</button>
-            </form>
-            {pinResult && (
-              <div style={{
-                fontSize: '0.85rem',
-                color: pinResult.available ? '#065f46' : '#991b1b',
-                background: pinResult.available ? '#d1fae5' : '#fee2e2',
-                padding: '8px 12px',
-                borderRadius: '6px',
-                marginBottom: '10px'
-              }}>
-                {pinResult.message}
+          {/* In-Store Showroom Availability & Direct Purchase */}
+          <div style={{
+            marginTop: '24px',
+            background: 'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%)',
+            border: '2px solid #bbf7d0',
+            borderRadius: 'var(--radius-lg)',
+            padding: '20px',
+            boxShadow: 'var(--shadow-sm)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+              <div style={{ background: '#16a34a', color: 'white', borderRadius: '50%', padding: '8px', display: 'flex' }}>
+                <Store size={22} />
               </div>
-            )}
-            <div className="delivery-features">
-              <div className="delivery-feature">
-                <Truck className="icon" size={16} style={{ color: 'var(--primary)' }} />
-                <span>Express Insured Courier: Delivery in 24 - 48 Hours</span>
-              </div>
-              <div className="delivery-feature">
-                <MapPin className="icon" size={16} style={{ color: 'var(--success)' }} />
-                <span>Free In-Store Pickup from Indiranagar Showroom</span>
-              </div>
-              <div className="delivery-feature">
-                <PhoneCall className="icon" size={16} style={{ color: '#d97706' }} />
-                <span>Need on-site setup? Call our engineer directly: +91 98765 43210</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Quantity Selector & Action Buttons */}
-          <div style={{ marginTop: '24px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
-              <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--gray-700)' }}>Quantity:</span>
-              <div className="quantity-selector">
-                <button 
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  disabled={quantity <= 1}
-                >
-                  -
-                </button>
-                <span>{quantity}</span>
-                <button 
-                  onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                  disabled={quantity >= product.stock}
-                >
-                  +
-                </button>
+              <div>
+                <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, color: '#14532d' }}>
+                  Walk-In Showroom & Direct In-Store Purchase
+                </h4>
+                <p style={{ margin: 0, fontSize: '0.82rem', color: '#166534' }}>
+                  Smartech Computers operates exclusively as an in-person physical showroom. No delivery waiting!
+                </p>
               </div>
             </div>
 
-            <div className="product-actions">
-              <button 
-                className="btn btn-secondary btn-lg" 
-                onClick={handleAddToCart}
-                disabled={product.stock <= 0}
+            <div style={{ background: 'white', borderRadius: '8px', padding: '14px 16px', border: '1px solid #dcfce7', marginBottom: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '8px' }}>
+                <MapPin size={18} style={{ color: '#059669', flexShrink: 0, marginTop: '2px' }} />
+                <div style={{ fontSize: '0.88rem', color: 'var(--gray-800)' }}>
+                  <strong>Showroom Address:</strong> RPGT Road, Near Shilpa Hospital, Hindupur, Andhra Pradesh
+                </div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.84rem', color: 'var(--gray-600)' }}>
+                <Clock size={16} style={{ color: '#059669' }} />
+                <span>Open Everyday: {shopSettings.timings || '10:00 AM - 9:00 PM'}</span>
+              </div>
+            </div>
+
+            {/* In-Store Advantages */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '20px', fontSize: '0.85rem', color: '#15803d' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <CheckCircle2 size={16} /> Live On-Desk Testing
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <CheckCircle2 size={16} /> Instant Physical Handover
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <CheckCircle2 size={16} /> Counter Price Negotiation
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <CheckCircle2 size={16} /> Free OS Setup & Assistance
+              </div>
+            </div>
+
+            {/* Action Buttons: WhatsApp Inquiry and Direct Phone Call */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '12px' }}>
+              <a 
+                href={`https://wa.me/91${shopSettings.whatsappNumber || '9030400551'}?text=Hi%20Smartech%20Computers,%20I%20am%20interested%20in%20visiting%20your%20Hindupur%20showroom%20to%20buy%20${encodeURIComponent(product.title)}%20(₹${product.price}).%20Is%20it%20available%20today?`}
+                target="_blank"
+                rel="noreferrer"
+                className="btn btn-lg"
+                style={{
+                  background: '#16a34a',
+                  color: 'white',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  fontWeight: 700,
+                  fontSize: '0.95rem',
+                  borderRadius: 'var(--radius-md)'
+                }}
               >
-                <ShoppingCart size={20} /> Add to Cart
-              </button>
-              <button 
-                className="btn btn-primary btn-lg" 
-                onClick={handleBuyNow}
-                disabled={product.stock <= 0}
+                <MessageSquare size={20} /> Inquire on WhatsApp
+              </a>
+
+              <a 
+                href={`tel:${shopSettings.primaryPhone || '9030400551'}`}
+                className="btn btn-outline btn-lg"
+                style={{
+                  borderColor: '#16a34a',
+                  color: '#166534',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  fontWeight: 700,
+                  fontSize: '0.95rem',
+                  borderRadius: 'var(--radius-md)'
+                }}
               >
-                <Zap size={20} /> Buy Now (Instant Checkout)
-              </button>
+                <PhoneCall size={18} /> Call Store
+              </a>
             </div>
           </div>
         </div>

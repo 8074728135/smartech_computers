@@ -11,7 +11,7 @@ import {
   Clock, 
   ShieldCheck, 
   Wrench, 
-  Truck, 
+  Store, 
   RotateCcw,
   Settings
 } from 'lucide-react';
@@ -61,11 +61,11 @@ export default function Footer() {
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
               <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(168,85,247,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#c084fc' }}>
-                <Truck size={26} />
+                <Store size={26} />
               </div>
               <div>
-                <h4 style={{ color: 'white', fontSize: '0.95rem', fontWeight: 700 }}>Insured Delivery & Pickup</h4>
-                <p style={{ color: '#94a3b8', fontSize: '0.8rem', marginTop: '2px' }}>Fast local delivery or shop pickup</p>
+                <h4 style={{ color: 'white', fontSize: '0.95rem', fontWeight: 700 }}>Direct Showroom Purchase</h4>
+                <p style={{ color: '#94a3b8', fontSize: '0.8rem', marginTop: '2px' }}>Inspect, test & buy at our RPGT Road shop</p>
               </div>
             </div>
           </div>
@@ -158,8 +158,8 @@ export default function Footer() {
             <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '-4px', marginBottom: '8px' }}>
               Update daily prices, stock, and shop profile
             </div>
-            <Link href="/track" className="footer-link">Track Order Status</Link>
-            <Link href="/cart" className="footer-link">View Cart & Checkout</Link>
+            <Link href="/track" className="footer-link">Track In-Shop Repair Job</Link>
+            <Link href="/products" className="footer-link">View Showroom Inventory</Link>
             
             <div style={{ marginTop: '16px', padding: '14px', background: '#1e293b', borderRadius: '10px' }}>
               <div style={{ fontSize: '0.8rem', color: '#e2e8f0', fontWeight: 700, marginBottom: '4px' }}>

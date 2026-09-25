@@ -91,7 +91,8 @@ async function runTestSuite() {
     logTest('PARADOX Brand displays Consistent', phtml.includes('Consistent'));
     logTest('PARADOX Price displays ₹1,299 or formatted price', phtml.includes('1,299') || phtml.includes('1299'));
     logTest('PARADOX Type-C Interface Spec Present', phtml.includes('Type-C'));
-    logTest('Pincode check widget present on product page', phtml.includes('Check Delivery') || phtml.includes('Pincode'));
+    logTest('Walk-In Showroom info present on product page', phtml.includes('Walk-In Showroom') || phtml.includes('RPGT Road') || phtml.includes('WhatsApp'));
+    logTest('No online delivery check remnants', !phtml.includes('Express Insured Courier'));
   } catch (err) {
     logTest('Product Detail Page Verification', false, err.message);
   }
@@ -129,22 +130,21 @@ async function runTestSuite() {
     logTest('Admin Security Gate Verification', false, err.message);
   }
 
-  // SUITE 6: Cart & Checkout Payment Options
-  console.log('\n--- Test Suite 6: Cart & Checkout ---');
+  // SUITE 6: Walk-In Showroom Guidance on Cart & Checkout
+  console.log('\n--- Test Suite 6: Showroom Guidance on Cart & Checkout ---');
   try {
     const cartPage = await fetchUrl('/cart');
     const chtml = cartPage.body;
     logTest('Cart Page Returns 200', cartPage.statusCode === 200);
-    logTest('Promo Code / Coupon Engine Present', chtml.includes('Promo Code') || chtml.includes('Coupon') || chtml.includes('FIRST500'));
+    logTest('Cart Displays Walk-In Showroom Notice', chtml.includes('Showroom') || chtml.includes('RPGT Road'));
 
     const checkoutPage = await fetchUrl('/checkout');
     const chkHtml = checkoutPage.body;
     logTest('Checkout Page Returns 200', checkoutPage.statusCode === 200);
-    logTest('UPI / QR Payment Option Present', chkHtml.includes('UPI') || chkHtml.includes('QR Code'));
-    logTest('Cash on Delivery Option Present', chkHtml.includes('Cash on Delivery') || chkHtml.includes('COD'));
-    logTest('Shop Pickup / Courier Delivery Toggle Present', chkHtml.includes('Pickup') || chkHtml.includes('Courier'));
+    logTest('Checkout Displays Walk-In Showroom Notice', chkHtml.includes('Showroom') || chkHtml.includes('RPGT Road'));
+    logTest('Browse Products CTA Present on Checkout', chkHtml.includes('Browse Showroom Products') || chkHtml.includes('/products'));
   } catch (err) {
-    logTest('Cart & Checkout Verification', false, err.message);
+    logTest('Showroom Guidance Verification', false, err.message);
   }
 
   // SUITE 8: Menu Options & Category Query Parameter Verification

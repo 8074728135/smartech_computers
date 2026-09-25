@@ -5,7 +5,6 @@ import './components.css';
 import { ShopProvider } from '@/context/ShopContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import CartDrawer from '@/components/CartDrawer';
 import OwnerRibbon from '@/components/OwnerRibbon';
 
 export const viewport = {
@@ -39,7 +38,6 @@ export default function RootLayout({
               {children}
             </main>
             <Footer />
-            <CartDrawer />
           </div>
         </ShopProvider>
       </body>

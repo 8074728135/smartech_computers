@@ -303,7 +303,7 @@ export default function ServicesPage() {
 
             <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '12px', padding: '20px', border: '1px solid rgba(255,255,255,0.1)' }}>
               <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#c084fc', marginBottom: '8px' }}>04</div>
-              <h4 style={{ fontSize: '1rem', fontWeight: 800, color: 'white', marginBottom: '6px' }}>Instant Repair & Pickup</h4>
+              <h4 style={{ fontSize: '1rem', fontWeight: 800, color: 'white', marginBottom: '6px' }}>Instant Repair & Handover</h4>
               <p style={{ fontSize: '0.82rem', color: '#94a3b8', lineHeight: 1.5 }}>
                 Screens, keyboards, SSDs, and thermal paste done same-day. Tested and handed back with shop warranty.
               </p>

@@ -64,7 +64,7 @@ export default function AdminPage() {
     showToast 
   } = useShop();
 
-  const [activeTab, setActiveTab] = useState<'daily-price' | 'services' | 'add-product' | 'orders' | 'settings' | 'bulk'>('daily-price');
+  const [activeTab, setActiveTab] = useState<'daily-price' | 'services' | 'add-product' | 'settings' | 'bulk'>('daily-price');
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
 
@@ -390,12 +390,12 @@ export default function AdminPage() {
 
         <div className="admin-stat-card">
           <div className="stat-header">
-            <span className="stat-label">Customer Orders</span>
-            <div className="stat-icon orders"><ShoppingCart size={20} color="#059669" /></div>
+            <span className="stat-label">In-Shop Job Cards</span>
+            <div className="stat-icon orders"><Clock size={20} color="#059669" /></div>
           </div>
-          <div className="stat-value">{orders.length}</div>
+          <div className="stat-value">{serviceBookings.length}</div>
           <div style={{ fontSize: '0.75rem', color: 'var(--gray-500)', marginTop: '4px' }}>
-            ₹{orders.reduce((sum, o) => sum + o.total, 0).toLocaleString('en-IN')} total sales
+            Active repair devices in workshop
           </div>
         </div>
 
@@ -482,26 +482,6 @@ export default function AdminPage() {
           <Plus size={16} /> Add Product / Refurbished PC
         </button>
 
-        <button
-          onClick={() => setActiveTab('orders')}
-          style={{
-            padding: '12px 18px',
-            fontSize: '0.95rem',
-            fontWeight: 700,
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            color: activeTab === 'orders' ? 'var(--primary)' : 'var(--gray-600)',
-            borderBottom: activeTab === 'orders' ? '3px solid var(--primary)' : '3px solid transparent',
-            marginBottom: '-2px',
-            whiteSpace: 'nowrap',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-        >
-          <ShoppingCart size={16} /> Customer Orders ({orders.length})
-        </button>
 
         <button
           onClick={() => setActiveTab('settings')}
@@ -1531,90 +1511,6 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* ============================================================== */}
-      {/* TAB 5: STORE ORDERS MANAGER                                    */}
-      {/* ============================================================== */}
-      {activeTab === 'orders' && (
-        <div className="admin-table-container">
-          <div className="admin-table-header">
-            <div>
-              <h3>Customer Product Orders</h3>
-              <p style={{ fontSize: '0.8rem', color: 'var(--gray-500)', marginTop: '2px' }}>
-                Track delivery fulfillment, payment status, and order dispatch.
-              </p>
-            </div>
-          </div>
-
-          <div style={{ overflowX: 'auto' }}>
-            <table className="admin-table">
-              <thead>
-                <tr>
-                  <th>Order No</th>
-                  <th>Customer</th>
-                  <th>Items Purchased</th>
-                  <th>Total Amount</th>
-                  <th>Payment Mode</th>
-                  <th>Fulfillment Status</th>
-                  <th>Estimated Delivery</th>
-                </tr>
-              </thead>
-              <tbody>
-                {orders.map((o) => (
-                  <tr key={o.id}>
-                    <td>
-                      <strong style={{ fontFamily: 'var(--font-mono)', color: 'var(--secondary)' }}>
-                        #{o.orderNumber}
-                      </strong>
-                      <div style={{ fontSize: '0.7rem', color: 'var(--gray-400)' }}>
-                        {new Date(o.createdAt).toLocaleDateString('en-IN')}
-                      </div>
-                    </td>
-                    <td>
-                      <div style={{ fontWeight: 600 }}>{o.customerName}</div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--gray-500)' }}>{o.phone}</div>
-                    </td>
-                    <td>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        {o.items.map((item, idx) => (
-                          <div key={idx} style={{ fontSize: '0.8rem' }}>
-                            • {item.title} (x{item.quantity})
-                          </div>
-                        ))}
-                      </div>
-                    </td>
-                    <td>
-                      <div style={{ fontWeight: 800, fontFamily: 'var(--font-mono)' }}>
-                        ₹{o.total.toLocaleString('en-IN')}
-                      </div>
-                    </td>
-                    <td>
-                      <span className={`badge ${o.paymentStatus === 'Paid' ? 'badge-success' : 'badge-warning'}`} style={{ fontSize: '0.75rem' }}>
-                        {o.paymentMethod}
-                      </span>
-                    </td>
-                    <td>
-                      <select 
-                        value={o.orderStatus} 
-                        onChange={(e) => updateOrderStatus(o.id, e.target.value as OrderStatus)}
-                        style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid var(--gray-300)', fontSize: '0.8rem', fontWeight: 600 }}
-                      >
-                        <option value="Placed">Placed</option>
-                        <option value="Confirmed">Confirmed</option>
-                        <option value="Dispatched">Dispatched</option>
-                        <option value="Delivered">Delivered</option>
-                        <option value="Cancelled">Cancelled</option>
-                      </select>
-                    </td>
-                    <td style={{ fontSize: '0.85rem' }}>
-                      {o.estimatedDelivery}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
 
       {/* ============================================================== */}
       {/* TAB 6: BULK DATA UPLOAD & INVENTORY IMPORT                     */}

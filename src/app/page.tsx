@@ -18,7 +18,7 @@ import {
   Clock, 
   Sparkles, 
   ArrowRight,
-  Truck,
+  Store,
   Star,
   Zap,
   Award,
@@ -198,7 +198,7 @@ export default function HomePage() {
                     <span style={{ fontSize: '1rem', color: '#94a3b8', textDecoration: 'line-through', marginLeft: '8px', fontFamily: 'var(--font-mono)' }}>₹2,499</span>
                   </div>
                   <Link href={`/products/${paradoxProduct.id}`} className="btn btn-primary" style={{ background: '#2563eb', padding: '12px 24px', fontWeight: 800 }}>
-                    Order Now (Hindupur Stock) →
+                    View Specs & Showroom Stock →
                   </Link>
                   <a 
                     href={`https://wa.me/91${shopSettings.whatsappNumber}?text=Hi%20Smartech%20Computers,%20I%20want%20to%20buy%20the%20Consistent%20PARADOX%20Gaming%20Keyboard`}

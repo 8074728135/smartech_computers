@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Product } from '@/types';
 import { useShop } from '@/context/ShopContext';
-import { X, Star, ShieldCheck, Check, ShoppingCart, ArrowRight } from 'lucide-react';
+import { X, Star, ShieldCheck, Check, ArrowRight, MessageSquare, PhoneCall } from 'lucide-react';
 
 interface QuickViewModalProps {
   product: Product;
@@ -12,13 +12,7 @@ interface QuickViewModalProps {
 }
 
 export default function QuickViewModal({ product, onClose }: QuickViewModalProps) {
-  const { addToCart, setIsCartOpen } = useShop();
-
-  const handleAddAndOpenCart = () => {
-    addToCart(product, 1);
-    onClose();
-    setIsCartOpen(true);
-  };
+  const { shopSettings } = useShop();
 
   return (
     <div 
@@ -143,7 +137,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                 )}
               </div>
               <div style={{ fontSize: '0.78rem', color: 'var(--gray-500)', marginTop: '4px' }}>
-                Inclusive of all taxes • Free store pickup or express courier
+                Inclusive of all taxes • Available at RPGT Road Hindupur Showroom
               </div>
               {product.isNegotiable !== false && (
                 <div style={{ fontSize: '0.8rem', color: '#16a34a', fontWeight: 800, marginTop: '4px' }}>
@@ -173,21 +167,21 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
               <span>{product.warranty}</span>
             </div>
 
-            {/* Actions */}
+            {/* Actions: WhatsApp Inquiry & View Full Details */}
             <div style={{ display: 'flex', gap: '12px' }}>
-              <button 
-                className="btn btn-primary" 
-                style={{ flex: 1, padding: '14px' }}
-                onClick={handleAddAndOpenCart}
-                disabled={product.stock <= 0}
+              <a 
+                href={`https://wa.me/91${shopSettings.whatsappNumber || '9030400551'}?text=Hi%20Smartech%20Computers,%20is%20${encodeURIComponent(product.title)}%20(₹${product.price})%20available%20in%20your%20Hindupur%20showroom?`}
+                target="_blank"
+                rel="noreferrer"
+                className="btn btn-primary"
+                style={{ flex: 1, padding: '14px', background: '#16a34a', borderColor: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', textDecoration: 'none' }}
               >
-                <ShoppingCart size={18} />
-                {product.stock > 0 ? 'Add to Cart & Checkout' : 'Out of Stock'}
-              </button>
+                <MessageSquare size={18} /> Inquire on WhatsApp
+              </a>
               <Link 
                 href={`/products/${product.id}`}
                 className="btn btn-outline"
-                style={{ padding: '14px 20px' }}
+                style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', gap: '6px', textDecoration: 'none' }}
                 onClick={onClose}
               >
                 Full Details <ArrowRight size={16} />

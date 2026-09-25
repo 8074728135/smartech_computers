@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Product } from '@/types';
 import { useShop } from '@/context/ShopContext';
-import { ShoppingCart, Star, ShieldCheck, Eye, Check, Edit3 } from 'lucide-react';
+import { Star, ShieldCheck, Eye, Edit3, MessageSquare, Store } from 'lucide-react';
 import QuickViewModal from './QuickViewModal';
 import QuickEditPriceModal from './QuickEditPriceModal';
 
@@ -13,18 +13,9 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { addToCart, isOwnerAuthenticated, userRole, currentUser } = useShop();
+  const { isOwnerAuthenticated, userRole, currentUser, shopSettings } = useShop();
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
   const [isEditPriceOpen, setIsEditPriceOpen] = useState(false);
-  const [isAdded, setIsAdded] = useState(false);
-
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    addToCart(product, 1);
-    setIsAdded(true);
-    setTimeout(() => setIsAdded(false), 1800);
-  };
 
   const handleQuickView = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -99,24 +90,17 @@ export default function ProductCard({ product }: ProductCardProps) {
               <Eye size={14} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />
               Quick Specs
             </button>
-            <button 
-              type="button" 
-              className="quick-add-btn" 
-              onClick={handleAddToCart}
-              disabled={product.stock <= 0}
+            <a 
+              href={`https://wa.me/91${shopSettings.whatsappNumber || '9030400551'}?text=Hi%20Smartech%20Computers,%20is%20${encodeURIComponent(product.title)}%20(₹${product.price})%20available%20in%20your%20Hindupur%20showroom?`}
+              target="_blank"
+              rel="noreferrer"
+              className="quick-add-btn"
+              onClick={(e) => e.stopPropagation()}
+              style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
             >
-              {isAdded ? (
-                <>
-                  <Check size={14} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />
-                  Added!
-                </>
-              ) : (
-                <>
-                  <ShoppingCart size={14} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />
-                  {product.stock > 0 ? 'Add to Cart' : 'Sold Out'}
-                </>
-              )}
-            </button>
+              <MessageSquare size={14} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />
+              Inquire
+            </a>
           </div>
         </Link>
 
@@ -190,32 +174,32 @@ export default function ProductCard({ product }: ProductCardProps) {
           {/* Stock availability */}
           <div className="product-availability">
             {product.stock > 0 ? (
-              <span className="in-stock">
-                ● In Stock {product.stock <= 5 && `(Only ${product.stock} left)`}
+              <span className="in-stock" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Store size={13} /> Available in Showroom {product.stock <= 5 && `(${product.stock} left)`}
               </span>
             ) : (
-              <span className="out-of-stock">● Currently Out of Stock</span>
+              <span className="out-of-stock">● Currently Out of Stock at Store</span>
             )}
           </div>
 
-          {/* Direct Mobile/Visible Add to Cart */}
-          <div style={{ marginTop: '12px' }}>
-            <button 
-              className={`btn btn-sm ${isAdded ? 'btn-secondary' : 'btn-primary'}`} 
-              style={{ width: '100%', fontSize: '0.85rem' }}
-              onClick={handleAddToCart}
-              disabled={product.stock <= 0}
+          {/* Direct Mobile/Visible Showroom Action Buttons */}
+          <div style={{ marginTop: '12px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+            <Link 
+              href={`/products/${product.id}`}
+              className="btn btn-sm btn-outline"
+              style={{ fontSize: '0.8rem', textAlign: 'center', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
             >
-              {isAdded ? (
-                <>
-                  <Check size={16} /> Added in Cart
-                </>
-              ) : (
-                <>
-                  <ShoppingCart size={16} /> Add to Cart
-                </>
-              )}
-            </button>
+              <Eye size={14} /> View Specs
+            </Link>
+            <a 
+              href={`https://wa.me/91${shopSettings.whatsappNumber || '9030400551'}?text=Hi%20Smartech%20Computers,%20is%20${encodeURIComponent(product.title)}%20(₹${product.price})%20available%20in%20your%20Hindupur%20showroom?`}
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-sm btn-primary"
+              style={{ fontSize: '0.8rem', textAlign: 'center', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', background: '#16a34a', borderColor: '#16a34a' }}
+            >
+              <MessageSquare size={14} /> Inquire
+            </a>
           </div>
         </div>
       </div>

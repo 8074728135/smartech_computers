@@ -8,7 +8,7 @@ import EnterpriseAuthModal from './EnterpriseAuthModal';
 import { 
   Laptop, 
   Search, 
-  ShoppingCart, 
+  MessageSquare, 
   Wrench, 
   MapPin, 
   PhoneCall, 
@@ -32,11 +32,6 @@ export default function Header() {
   const currentCategory = searchParams.get('category');
 
   const { 
-    cartCount, 
-    userPincode, 
-    setUserPincode, 
-    checkDelivery, 
-    setIsCartOpen, 
     products, 
     shopSettings, 
     isOwnerAuthenticated,
@@ -50,9 +45,6 @@ export default function Header() {
   } = useShop();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(currentCategory || 'all');
-  const [isPinModalOpen, setIsPinModalOpen] = useState(false);
-  const [tempPin, setTempPin] = useState(userPincode);
-  const [pinResult, setPinResult] = useState<{ available: boolean; workbenchRepairAvailable: boolean; message: string } | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -65,19 +57,6 @@ export default function Header() {
     }
     router.push(`/products?q=${encodeURIComponent(searchTerm)}&category=${selectedCategory}`);
     setSearchFocused(false);
-  };
-
-  const handlePincodeSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    const res = checkDelivery(tempPin);
-    setPinResult(res);
-    if (res.available) {
-      setUserPincode(tempPin);
-      setTimeout(() => {
-        setIsPinModalOpen(false);
-        setPinResult(null);
-      }, 1200);
-    }
   };
 
   // Discrete Owner Portal Shortcut: Ctrl + Shift + A (or Ctrl + Shift + O)
@@ -215,22 +194,26 @@ export default function Header() {
             </div>
           </Link>
 
-          {/* Location Delivery Selector Pill */}
-          <button 
-            type="button"
-            className="header-action-btn"
-            style={{ flexDirection: 'row', gap: '6px', textAlign: 'left', padding: '6px 12px', background: 'var(--gray-100)', borderRadius: 'var(--radius-md)' }}
-            onClick={() => setIsPinModalOpen(true)}
-            title="Click to check product delivery and store pickup"
+          {/* Physical Showroom Location Pill */}
+          <div 
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px', 
+              textAlign: 'left', 
+              padding: '6px 12px', 
+              background: 'var(--gray-100)', 
+              borderRadius: 'var(--radius-md)' 
+            }}
           >
             <MapPin size={18} style={{ color: 'var(--primary)', flexShrink: 0 }} />
             <div>
-              <div style={{ fontSize: '0.68rem', color: 'var(--gray-500)', lineHeight: 1 }}>Delivery & Pickup at</div>
+              <div style={{ fontSize: '0.68rem', color: 'var(--gray-500)', lineHeight: 1 }}>Walk-In Showroom</div>
               <div style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--gray-800)', lineHeight: 1.2 }}>
-                {userPincode ? `PIN ${userPincode} (Hindupur)` : 'Enter PIN'}
+                RPGT Road, Hindupur
               </div>
             </div>
-          </button>
+          </div>
 
           {/* Search bar */}
           <div className="search-container">
@@ -425,7 +408,7 @@ export default function Header() {
                         textDecoration: 'none'
                       }}
                     >
-                      <Clock size={16} /> Track My Orders & Repairs
+                      <Clock size={16} /> Track In-Shop Job Cards
                     </Link>
 
                     <button
@@ -468,17 +451,19 @@ export default function Header() {
               </button>
             )}
 
-            <button 
+            <a 
+              href={`https://wa.me/91${shopSettings.whatsappNumber}?text=Hi%20Smartech%20Computers,%20I%20am%20interested%20in%20visiting%20your%20RPGT%20Road%20showroom.`}
+              target="_blank"
+              rel="noreferrer"
               className="header-action-btn"
-              onClick={() => setIsCartOpen(true)}
-              aria-label="View Shopping Cart"
+              style={{ textDecoration: 'none' }}
+              title="Chat with shop on WhatsApp"
             >
-              <span className="icon" style={{ position: 'relative' }}>
-                <ShoppingCart size={22} />
-                {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
+              <span className="icon" style={{ color: '#16a34a' }}>
+                <MessageSquare size={20} />
               </span>
-              <span className="label">Cart</span>
-            </button>
+              <span className="label" style={{ color: '#16a34a', fontWeight: 700 }}>WhatsApp</span>
+            </a>
           </div>
         </div>
 
@@ -633,99 +618,7 @@ export default function Header() {
         </nav>
       </div>
 
-      {/* Pincode Modal */}
-      {isPinModalOpen && (
-        <div 
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0,0,0,0.6)',
-            backdropFilter: 'blur(4px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 10000,
-            padding: '20px'
-          }}
-          onClick={() => setIsPinModalOpen(false)}
-        >
-          <div 
-            style={{
-              background: 'white',
-              borderRadius: 'var(--radius-xl)',
-              maxWidth: '460px',
-              width: '100%',
-              padding: '28px',
-              boxShadow: 'var(--shadow-xl)',
-              position: 'relative'
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button 
-              onClick={() => setIsPinModalOpen(false)}
-              style={{
-                position: 'absolute',
-                top: '16px',
-                right: '16px',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                color: 'var(--gray-500)'
-              }}
-            >
-              <X size={20} />
-            </button>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
-                <MapPin size={22} />
-              </div>
-              <div>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--secondary)' }}>Check Delivery & Store Pickup</h3>
-                <p style={{ fontSize: '0.85rem', color: 'var(--gray-500)' }}>Check product delivery & in-shop workbench repair at RPGT Road, Hindupur</p>
-              </div>
-            </div>
-
-            <form onSubmit={handlePincodeSave}>
-              <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
-                <input 
-                  type="text" 
-                  maxLength={6}
-                  placeholder="e.g. 515201" 
-                  value={tempPin}
-                  onChange={(e) => setTempPin(e.target.value.replace(/\D/g, ''))}
-                  className="input"
-                  style={{ flex: 1, fontSize: '1.1rem', letterSpacing: '2px', fontWeight: 700 }}
-                  autoFocus
-                />
-                <button type="submit" className="btn btn-primary">
-                  Check PIN
-                </button>
-              </div>
-            </form>
-
-            {pinResult && (
-              <div style={{
-                padding: '12px 16px',
-                borderRadius: 'var(--radius-md)',
-                background: pinResult.available ? 'var(--success-light)' : 'var(--danger-light)',
-                color: pinResult.available ? '#065f46' : '#991b1b',
-                fontSize: '0.88rem',
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '8px'
-              }}>
-                <CheckCircle2 size={18} style={{ flexShrink: 0, marginTop: '2px' }} />
-                <span>{pinResult.message}</span>
-              </div>
-            )}
-
-            <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid var(--gray-200)', fontSize: '0.8rem', color: 'var(--gray-500)' }}>
-              📍 <strong>Smartech Computers Workbench:</strong> RPGT Road, Near Shilpa Hospital, Hindupur. Bring damaged laptops & PCs for immediate front-of-desk testing!
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Enterprise Authentication & Password Recovery Dialog */}
       <EnterpriseAuthModal 
