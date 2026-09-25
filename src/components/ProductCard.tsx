@@ -181,6 +181,11 @@ export default function ProductCard({ product }: ProductCardProps) {
               <span className="product-discount">Save ₹{(product.mrp - product.price).toLocaleString('en-IN')}</span>
             )}
           </div>
+          {product.isNegotiable !== false && (
+            <div style={{ fontSize: '0.72rem', color: '#16a34a', fontWeight: 700, marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              🤝 Price is Negotiable
+            </div>
+          )}
 
           {/* Stock availability */}
           <div className="product-availability">

@@ -39,7 +39,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
   const [selectedImage, setSelectedImage] = useState<string>(product?.images?.[0] || product?.image || '');
   const [quantity, setQuantity] = useState<number>(1);
   const [checkPin, setCheckPin] = useState<string>(userPincode);
-  const [pinResult, setPinResult] = useState<{ available: boolean; homeServiceAvailable: boolean; message: string } | null>(null);
+  const [pinResult, setPinResult] = useState<{ available: boolean; workbenchRepairAvailable: boolean; message: string } | null>(null);
   const [activeTab, setActiveTab] = useState<'specs' | 'condition' | 'reviews'>('specs');
 
   if (!product) {
@@ -123,7 +123,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
           {/* Trust Guarantees Box */}
           <div style={{ marginTop: '24px', background: 'var(--white)', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-lg)', padding: '20px' }}>
             <h4 style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--secondary)', marginBottom: '14px' }}>
-              Why Buy This Certified Unit from TechCraft:
+              Why Buy This Certified Unit from Smartech Computers:
             </h4>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', fontSize: '0.85rem', color: 'var(--gray-700)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -136,7 +136,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Truck size={18} style={{ color: '#d97706' }} />
-                <span>Insured Doorstep Delivery</span>
+                <span>Insured Delivery or Store Pickup</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Wrench size={18} style={{ color: '#7c3aed' }} />
@@ -203,6 +203,11 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
             <div className="detail-tax-info">
               Inclusive of all taxes • You save ₹{(product.mrp - product.price).toLocaleString('en-IN')}
             </div>
+            {product.isNegotiable !== false && (
+              <div style={{ marginTop: '6px', fontSize: '0.82rem', color: '#16a34a', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '5px' }}>
+                🤝 Price is Negotiable at Store Counter
+              </div>
+            )}
             <div style={{ marginTop: '10px', fontSize: '0.85rem', color: '#1e40af', background: '#eff6ff', padding: '8px 12px', borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Zap size={15} /> No Cost EMI starts from <strong>₹{Math.round(product.price / 6).toLocaleString('en-IN')}/month</strong>
             </div>
@@ -218,10 +223,10 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
             </ul>
           </div>
 
-          {/* Delivery & Home Service Checker */}
+          {/* Delivery & Store Pickup Checker */}
           <div className="product-delivery-info">
             <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--gray-700)', marginBottom: '8px' }}>
-              Check Delivery & Home Visit Support:
+              Check Delivery & Store Pickup:
             </div>
             <form onSubmit={handleCheckDelivery} className="delivery-check">
               <input 

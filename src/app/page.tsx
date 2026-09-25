@@ -68,10 +68,10 @@ export default function HomePage() {
             </div>
             <h1>
               Refurbished Laptops & PCs. <br />
-              <span className="highlight">All Accessories & Home Repair.</span>
+              <span className="highlight">All Accessories & In-Shop Repairs.</span>
             </h1>
             <p>
-              Hindupur's premier computer hub for certified refurbished laptops, gaming desktop builds, NVMe SSD upgrades, genuine accessories, and chip-level repairs with <strong>Doorstep Home Service</strong> across Hindupur and surrounding areas.
+              Hindupur's premier computer hub for certified refurbished laptops, gaming desktop builds, NVMe SSD upgrades, genuine accessories, and chip-level repairs at our <strong>RPGT Road Workbench Lab</strong> near Shilpa Hospital.
             </p>
 
             <div className="hero-buttons">
@@ -79,7 +79,7 @@ export default function HomePage() {
                 Browse Stock & Offers <ArrowRight size={18} />
               </Link>
               <Link href="/services" className="hero-btn-secondary">
-                <Wrench size={18} /> Book Repair / Home Visit
+                <Wrench size={18} /> In-Shop Repair Services
               </Link>
             </div>
 
@@ -94,8 +94,8 @@ export default function HomePage() {
                 <div className="hero-stat-label">Warranty Support</div>
               </div>
               <div className="hero-stat">
-                <div className="hero-stat-value">Doorstep</div>
-                <div className="hero-stat-label">Home Technician Service</div>
+                <div className="hero-stat-value">In-Shop</div>
+                <div className="hero-stat-label">Workbench Diagnostic Lab</div>
               </div>
             </div>
           </div>
@@ -128,12 +128,12 @@ export default function HomePage() {
                 </div>
               )}
 
-              {/* Home Service Badge */}
+              {/* In-Shop Workbench Badge */}
               <div className="hero-float-card" style={{ bottom: '15px', right: '10px' }}>
-                <div className="card-icon" style={{ color: '#34d399' }}><Home size={30} /></div>
-                <div className="card-title">Hindupur Home Service</div>
-                <div className="card-desc">Technician visits your home for heavy desktop & laptop repair</div>
-                <div style={{ marginTop: '6px', fontSize: '0.85rem', color: '#6ee7b7', fontWeight: 800 }}>RPGT Road Workbench</div>
+                <div className="card-icon" style={{ color: '#34d399' }}><Wrench size={30} /></div>
+                <div className="card-title">RPGT Road Workbench</div>
+                <div className="card-desc">Bring damaged laptops & PCs for free 15-min inspection</div>
+                <div style={{ marginTop: '6px', fontSize: '0.85rem', color: '#6ee7b7', fontWeight: 800 }}>🤝 Price is Negotiable</div>
               </div>
             </div>
           </div>
@@ -222,7 +222,7 @@ export default function HomePage() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '28px' }}>
             <div>
               <h2 className="section-title">Shop by Category</h2>
-              <p style={{ color: 'var(--gray-500)', fontSize: '0.95rem' }}>Select what you need: Certified refurbished systems, accessories, upgrades, or home repairs in Hindupur</p>
+              <p style={{ color: 'var(--gray-500)', fontSize: '0.95rem' }}>Select what you need: Certified refurbished systems, accessories, upgrades, or in-shop workbench repairs in Hindupur</p>
             </div>
             <Link href="/products" style={{ color: 'var(--primary)', fontWeight: 600, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
               View All Showroom Stock <ArrowRight size={16} />
@@ -274,8 +274,8 @@ export default function HomePage() {
               <div className="category-icon repair">
                 <Wrench size={32} style={{ color: '#dc2626' }} />
               </div>
-              <span className="category-name" style={{ color: 'var(--primary)', fontWeight: 800 }}>Home Service & Repair</span>
-              <span style={{ fontSize: '0.75rem', color: 'var(--primary)' }}>Hindupur & Surroundings</span>
+              <span className="category-name" style={{ color: 'var(--primary)', fontWeight: 800 }}>In-Shop Repair Lab</span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--primary)' }}>RPGT Road Workbench</span>
             </Link>
           </div>
         </div>
@@ -325,20 +325,20 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ===== DOORSTEP HOME SERVICE SPOTLIGHT (HINDUPUR REGION) ===== */}
+      {/* ===== IN-SHOP WORKBENCH REPAIR LAB SPOTLIGHT (RPGT ROAD, HINDUPUR) ===== */}
       <section className="section" style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', color: 'white' }}>
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '48px', alignItems: 'center' }}>
             <div>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(37,99,235,0.2)', border: '1px solid rgba(96,165,250,0.3)', color: '#60a5fa', padding: '6px 14px', borderRadius: '999px', fontSize: '0.85rem', fontWeight: 700, marginBottom: '16px' }}>
-                <Home size={16} /> Doorstep Repair Service • Hindupur
+                <Wrench size={16} /> In-Shop Repair Lab • Near Shilpa Hospital, RPGT Road
               </div>
               <h2 style={{ fontSize: '2.4rem', fontWeight: 900, lineHeight: 1.2, marginBottom: '16px' }}>
-                Heavy Computer or Broken Laptop? <br />
-                <span style={{ color: '#60a5fa' }}>Smartech Comes Directly to Your Doorstep!</span>
+                Damaged Laptop, Broken Screen or Dead PC? <br />
+                <span style={{ color: '#60a5fa' }}>Bring It Directly to Our RPGT Road Workbench!</span>
               </h2>
               <p style={{ color: '#cbd5e1', fontSize: '1.05rem', lineHeight: 1.7, marginBottom: '28px' }}>
-                No need to carry heavy CPU towers or risk breaking laptop screens in transit. Our senior technician visits your home or office anywhere in Hindupur, Lepakshi, Chilamathur, and Penukonda with diagnostic gear and spare parts.
+                Bring your damaged laptop, desktop PC, monitor, or printer directly to our shop workbench in Hindupur. We inspect your device on our test bench right in front of you, give you a transparent diagnosis, and perform instant chip-level and part repairs.
               </p>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '32px' }}>
@@ -346,28 +346,34 @@ export default function HomePage() {
                   <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
                     <CheckCircle2 size={16} />
                   </div>
-                  <span style={{ fontSize: '0.95rem' }}><strong>Screen, Battery & Keyboard Swaps:</strong> Repaired at your home in 45-60 mins</span>
+                  <span style={{ fontSize: '0.95rem' }}><strong>Free 15-Minute Bench Diagnosis:</strong> Checked in front of you with zero hidden charges</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
                     <CheckCircle2 size={16} />
                   </div>
-                  <span style={{ fontSize: '0.95rem' }}><strong>SSD Speed Upgrade & Windows 11:</strong> 10x faster speed on-site with 100% data safety</span>
+                  <span style={{ fontSize: '0.95rem' }}><strong>Screen, Battery & Keyboard Swaps:</strong> Original parts fitted same-day at shop</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
                     <CheckCircle2 size={16} />
                   </div>
-                  <span style={{ fontSize: '0.95rem' }}><strong>RPGT Road Workshop:</strong> Advanced BGA micro-soldering for dead motherboards</span>
+                  <span style={{ fontSize: '0.95rem' }}><strong>BGA Chip-Level Motherboard Lab:</strong> Oscilloscopes and rework stations for dead systems</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+                    <CheckCircle2 size={16} />
+                  </div>
+                  <span style={{ fontSize: '0.95rem' }}><strong>🤝 Price is Negotiable:</strong> Competitive, market-friendly prices negotiable at our counter!</span>
                 </div>
               </div>
 
               <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
                 <Link href="/services" className="btn btn-primary btn-lg">
-                  <Wrench size={18} /> Book Doorstep Home Visit
+                  <Wrench size={18} /> Explore Repair Services & Rates
                 </Link>
                 <a href={`tel:${shopSettings.primaryPhone}`} className="btn btn-outline btn-lg" style={{ color: 'white', borderColor: 'rgba(255,255,255,0.4)' }}>
-                  <PhoneCall size={18} /> Call Azeez: {shopSettings.primaryPhone}
+                  <PhoneCall size={18} /> Call Workshop: {shopSettings.primaryPhone}
                 </a>
               </div>
             </div>
@@ -390,7 +396,7 @@ export default function HomePage() {
                   <strong>{shopSettings.timings}</strong>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                  <span style={{ color: '#94a3b8' }}>Contact Person:</span>
+                  <span style={{ color: '#94a3b8' }}>Workbench Manager:</span>
                   <strong>Azeez ({shopSettings.ownerName})</strong>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
@@ -402,13 +408,13 @@ export default function HomePage() {
                   <strong>{shopSettings.secondaryPhone}</strong>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#94a3b8' }}>Active Home Service Areas:</span>
-                  <span style={{ textAlign: 'right', color: '#86efac', fontWeight: 700 }}>Hindupur, Lepakshi, Chilamathur, Penukonda</span>
+                  <span style={{ color: '#94a3b8' }}>Walk-In Service Location:</span>
+                  <span style={{ textAlign: 'right', color: '#86efac', fontWeight: 700 }}>RPGT Road, Near Shilpa Hospital</span>
                 </div>
               </div>
 
               <div style={{ padding: '14px', background: 'rgba(37,99,235,0.2)', borderRadius: '10px', border: '1px solid rgba(96,165,250,0.3)', fontSize: '0.85rem', color: '#93c5fd', textAlign: 'center' }}>
-                🚀 <strong>Visit Charge: Only ₹299</strong> (Waived upon repair service approval!)
+                📍 <strong>Walk-In Workbench:</strong> Bring your damaged device with charger for instant on-the-spot testing.
               </div>
             </div>
           </div>

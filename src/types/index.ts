@@ -41,6 +41,7 @@ export interface Product {
   conditionSummary: string;
   isDailyDeal?: boolean;
   isFeatured?: boolean;
+  isNegotiable?: boolean;
   updatedAt?: string;
 }
 
@@ -125,7 +126,7 @@ export interface RepairServiceInfo {
   startingPrice: number;
   turnaroundTime: string;
   sameDayRepair?: boolean;
-  homeVisitEligible?: boolean;
+  isNegotiable?: boolean;
   description: string;
   commonIssues: string[];
 }

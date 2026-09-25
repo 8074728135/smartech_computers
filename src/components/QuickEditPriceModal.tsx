@@ -17,12 +17,13 @@ export default function QuickEditPriceModal({ product, isOpen, onClose }: QuickE
   const [price, setPrice] = useState<number>(product.price);
   const [mrp, setMrp] = useState<number>(product.mrp);
   const [stock, setStock] = useState<number>(product.stock);
+  const [isNegotiable, setIsNegotiable] = useState<boolean>(product.isNegotiable !== false);
 
   if (!isOpen) return null;
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    quickUpdatePriceAndStock(product.id, Number(price), Number(stock), Number(mrp));
+    quickUpdatePriceAndStock(product.id, Number(price), Number(stock), Number(mrp), isNegotiable);
     showToast(`Updated "${product.title}" price to ₹${Number(price).toLocaleString('en-IN')}`, 'success');
     onClose();
   };
@@ -150,6 +151,18 @@ export default function QuickEditPriceModal({ product, isOpen, onClose }: QuickE
                 {discountPercent}% OFF
               </div>
             </div>
+          </div>
+
+          <div style={{ marginBottom: '16px', padding: '10px 12px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 700, color: '#1e293b' }}>
+              <input 
+                type="checkbox" 
+                checked={isNegotiable} 
+                onChange={(e) => setIsNegotiable(e.target.checked)} 
+                style={{ width: '16px', height: '16px', accentColor: '#2563eb' }}
+              />
+              <span>🤝 Price is Negotiable (Show &ldquo;Price is Negotiable&rdquo; tag to customers)</span>
+            </label>
           </div>
 
           <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '16px' }}>

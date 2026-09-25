@@ -130,7 +130,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Repair & Home Services */}
+        {/* In-Shop Repair Services */}
         <div>
           <h4 className="footer-heading">Repair Services</h4>
           <div className="footer-links">
@@ -140,7 +140,7 @@ export default function Footer() {
             <Link href="/services" className="footer-link">Battery & DC Jack Replacement</Link>
             <Link href="/services" className="footer-link">Motherboard Chip-Level BGA</Link>
             <Link href="/services" className="footer-link">Deep Cleaning & Thermal Repaste</Link>
-            <Link href="/track" className="footer-link">Track Your Repair Job Card</Link>
+            <Link href="/services" className="footer-link">Repair Price List (Negotiable)</Link>
           </div>
         </div>
 

@@ -1,8 +1,8 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Product, CartItem, Order, ServiceBooking, OrderStatus, ShopSettings, UserRole, UserProfile } from '@/types';
-import { INITIAL_PRODUCTS, INITIAL_ORDERS, INITIAL_SERVICES, DEFAULT_SHOP_SETTINGS } from '@/lib/initialData';
+import { Product, CartItem, Order, ServiceBooking, OrderStatus, ShopSettings, UserRole, UserProfile, RepairServiceInfo } from '@/types';
+import { INITIAL_PRODUCTS, INITIAL_ORDERS, INITIAL_SERVICES, REPAIR_SERVICES, DEFAULT_SHOP_SETTINGS } from '@/lib/initialData';
 
 interface ToastMessage {
   id: string;
@@ -21,9 +21,15 @@ interface ShopContextType {
   addProduct: (productData: Omit<Product, 'id' | 'slug' | 'updatedAt' | 'discountPercent'>) => Product;
   updateProduct: (id: string, updates: Partial<Product>) => void;
   deleteProduct: (id: string) => void;
-  quickUpdatePriceAndStock: (id: string, price: number, stock: number, mrp?: number) => void;
+  quickUpdatePriceAndStock: (id: string, price: number, stock: number, mrp?: number, isNegotiable?: boolean) => void;
   bulkUpdateProducts: (newProducts: Product[]) => void;
   resetToInitialProducts: () => void;
+
+  // In-Shop Repair Services Management
+  repairServices: RepairServiceInfo[];
+  addRepairService: (serviceData: Omit<RepairServiceInfo, 'id'>) => void;
+  updateRepairService: (id: string, updates: Partial<RepairServiceInfo>) => void;
+  deleteRepairService: (id: string) => void;
 
   // Cart
   cart: CartItem[];
@@ -53,7 +59,7 @@ interface ShopContextType {
   // Pincode
   userPincode: string;
   setUserPincode: (pin: string) => void;
-  checkDelivery: (pin: string) => { available: boolean; homeServiceAvailable: boolean; message: string };
+  checkDelivery: (pin: string) => { available: boolean; workbenchRepairAvailable: boolean; message: string };
 
   // Toast
   toasts: ToastMessage[];
@@ -394,7 +400,7 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
     showToast('Product removed from catalog', 'info');
   };
 
-  const quickUpdatePriceAndStock = (id: string, price: number, stock: number, mrp?: number) => {
+  const quickUpdatePriceAndStock = (id: string, price: number, stock: number, mrp?: number, isNegotiable?: boolean) => {
     setProducts((prev) =>
       prev.map((p) => {
         if (p.id !== id) return p;
@@ -406,11 +412,12 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
           stock,
           mrp: finalMrp,
           discountPercent,
+          isNegotiable: isNegotiable !== undefined ? isNegotiable : p.isNegotiable,
           updatedAt: new Date().toISOString()
         };
       })
     );
-    showToast('Price and stock updated instantly!', 'success');
+    showToast('Price, stock and negotiable terms updated instantly!', 'success');
   };
 
   const bulkUpdateProducts = (newProducts: Product[]) => {
@@ -575,13 +582,58 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
     showToast('Service booking updated!', 'success');
   };
 
+  // Dynamic In-Shop Repair Services Catalog
+  const [repairServices, setRepairServices] = useState<RepairServiceInfo[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('smartech_repair_services_catalog_v2');
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+    return REPAIR_SERVICES;
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('smartech_repair_services_catalog_v2', JSON.stringify(repairServices));
+    }
+  }, [repairServices]);
+
+  const addRepairService = (serviceData: Omit<RepairServiceInfo, 'id'>) => {
+    const id = `srv-${Date.now().toString(36)}`;
+    const newService: RepairServiceInfo = {
+      ...serviceData,
+      id,
+      isNegotiable: serviceData.isNegotiable !== undefined ? serviceData.isNegotiable : true,
+      sameDayRepair: serviceData.sameDayRepair !== undefined ? serviceData.sameDayRepair : true
+    };
+    setRepairServices((prev) => [newService, ...prev]);
+    showToast(`Added service: ${newService.title} (₹${newService.startingPrice})`, 'success');
+  };
+
+  const updateRepairService = (id: string, updates: Partial<RepairServiceInfo>) => {
+    setRepairServices((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, ...updates } : s))
+    );
+    showToast('Service price & details updated!', 'success');
+  };
+
+  const deleteRepairService = (id: string) => {
+    setRepairServices((prev) => prev.filter((s) => s.id !== id));
+    showToast('Service removed from shop catalog.', 'info');
+  };
+
   // Delivery check logic for Hindupur & Surroundings
   const checkDelivery = (pin: string) => {
     const cleaned = pin.trim();
     if (!/^\d{6}$/.test(cleaned)) {
       return {
         available: false,
-        homeServiceAvailable: false,
+        workbenchRepairAvailable: false,
         message: 'Please enter a valid 6-digit PIN code.'
       };
     }
@@ -589,7 +641,7 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
     if (cleaned.startsWith('515')) {
       return {
         available: true,
-        homeServiceAvailable: false,
+        workbenchRepairAvailable: true,
         message: 'Express 2-Hour Delivery for accessories & In-Shop Workbench Repair in Hindupur!'
       };
     }
@@ -597,13 +649,13 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
     if (cleaned.startsWith('560') || cleaned.startsWith('561') || cleaned.startsWith('562')) {
       return {
         available: true,
-        homeServiceAvailable: false,
+        workbenchRepairAvailable: true,
         message: 'Next-Day Courier Delivery Available! In-shop repairs at our Hindupur workbench.'
       };
     }
     return {
       available: true,
-      homeServiceAvailable: false,
+      workbenchRepairAvailable: true,
       message: 'All-India Insured Courier Delivery Available (2-4 Days). Repairs are handled at our RPGT Road shop.'
     };
   };
@@ -914,6 +966,10 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
         serviceBookings,
         createServiceBooking,
         updateServiceBooking,
+        repairServices,
+        addRepairService,
+        updateRepairService,
+        deleteRepairService,
         userPincode,
         setUserPincode,
         checkDelivery,

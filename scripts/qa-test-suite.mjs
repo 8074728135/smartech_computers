@@ -106,7 +106,8 @@ async function runTestSuite() {
     logTest('Walk-In Shop Repair Option Present', shtml.includes('Walk-In') || shtml.includes('Workbench') || shtml.includes('RPGT Road'));
     logTest('Shop Drop-Off Workbench Available', shtml.includes('Workbench') || shtml.includes('Shop'));
     logTest('Screen Replacement Listed', shtml.includes('Screen Replacement'));
-    logTest('In-Shop Job Card Form Present', shtml.includes('Job Card') || shtml.includes('Generate'));
+    logTest('Walk-In Workbench Guide & Negotiable Rates Present', shtml.includes('Walk-In') && (shtml.includes('Negotiable') || shtml.includes('Rates')));
+    logTest('No Home Repair Remnants', !shtml.toLowerCase().includes('home visit') && !shtml.toLowerCase().includes('home repair'));
     logTest('Hindupur Coverage Area Mentioned', shtml.includes('Hindupur'));
   } catch (err) {
     logTest('Services Verification', false, err.message);

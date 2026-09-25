@@ -143,8 +143,13 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                 )}
               </div>
               <div style={{ fontSize: '0.78rem', color: 'var(--gray-500)', marginTop: '4px' }}>
-                Inclusive of all taxes • Free store pickup or doorstep courier
+                Inclusive of all taxes • Free store pickup or express courier
               </div>
+              {product.isNegotiable !== false && (
+                <div style={{ fontSize: '0.8rem', color: '#16a34a', fontWeight: 800, marginTop: '4px' }}>
+                  🤝 Price is Negotiable in Shop
+                </div>
+              )}
             </div>
 
             {/* Specs Highlights */}

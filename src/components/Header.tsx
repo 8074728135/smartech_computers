@@ -52,7 +52,7 @@ export default function Header() {
   const [selectedCategory, setSelectedCategory] = useState(currentCategory || 'all');
   const [isPinModalOpen, setIsPinModalOpen] = useState(false);
   const [tempPin, setTempPin] = useState(userPincode);
-  const [pinResult, setPinResult] = useState<{ available: boolean; homeServiceAvailable: boolean; message: string } | null>(null);
+  const [pinResult, setPinResult] = useState<{ available: boolean; workbenchRepairAvailable: boolean; message: string } | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -331,7 +331,7 @@ export default function Header() {
               style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', borderColor: 'var(--primary)' }}
             >
               <Wrench size={16} />
-              <span>Book Repair</span>
+              <span>Repair Services</span>
             </Link>
 
             {/* Customer Account Button */}
@@ -721,7 +721,7 @@ export default function Header() {
             )}
 
             <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid var(--gray-200)', fontSize: '0.8rem', color: 'var(--gray-500)' }}>
-              📍 <strong>Smartech Computers Service Center:</strong> RPGT Road, Near Shilpa Hospital, Hindupur. Same-day technician visits available across Hindupur, Lepakshi, Chilamathur, and Penukonda!
+              📍 <strong>Smartech Computers Workbench:</strong> RPGT Road, Near Shilpa Hospital, Hindupur. Bring damaged laptops & PCs for immediate front-of-desk testing!
             </div>
           </div>
         </div>

@@ -178,8 +178,8 @@ export default function CheckoutPage() {
                 >
                   <Truck size={20} style={{ color: 'var(--primary)' }} />
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>Doorstep Delivery</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--gray-500)' }}>Hindupur & All India (FREE)</div>
+                    <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>Courier Delivery</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--gray-500)' }}>To your address (Free Insured Shipping)</div>
                   </div>
                 </div>
 

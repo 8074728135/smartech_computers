@@ -57,6 +57,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     conditionSummary: 'Brand new sealed packaging with 3-year warranty.',
     isDailyDeal: true,
     isFeatured: true,
+    isNegotiable: true,
     updatedAt: new Date().toISOString()
   },
   {
@@ -89,6 +90,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     conditionSummary: 'Grade A corporate pullout. Thoroughly serviced and tested.',
     isDailyDeal: true,
     isFeatured: true,
+    isNegotiable: true,
     updatedAt: new Date().toISOString()
   },
   {
@@ -120,6 +122,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     conditionSummary: 'Pristine Grade A+ condition with genuine power adapter.',
     isDailyDeal: true,
     isFeatured: true,
+    isNegotiable: true,
     updatedAt: new Date().toISOString()
   },
   {
@@ -149,6 +152,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     conditionSummary: 'Brand new in box with warranty certificate.',
     isDailyDeal: true,
     isFeatured: true,
+    isNegotiable: true,
     updatedAt: new Date().toISOString()
   }
 ];
@@ -182,6 +186,7 @@ export const AVAILABLE_SHOWROOM_TEMPLATES: Product[] = [
     conditionSummary: 'Brand New Factory Sealed Pack.',
     isDailyDeal: false,
     isFeatured: false,
+    isNegotiable: true,
     updatedAt: new Date().toISOString()
   },
   {
@@ -208,6 +213,7 @@ export const AVAILABLE_SHOWROOM_TEMPLATES: Product[] = [
     conditionSummary: 'Grade A+ condition.',
     isDailyDeal: false,
     isFeatured: false,
+    isNegotiable: true,
   }
 ];
 
@@ -220,7 +226,7 @@ export const REPAIR_SERVICES: RepairServiceInfo[] = [
     startingPrice: 1899,
     turnaroundTime: '1 - 2 Hours',
     sameDayRepair: true,
-    homeVisitEligible: false,
+    isNegotiable: true,
     description: 'Cracked, broken, lines on display, or blank screen. 100% original A+ grade replacement screens for Dell, HP, Lenovo, Acer, Asus, Apple, etc. Fitted directly at our RPGT Road shop workbench in Hindupur.',
     commonIssues: ['Black screen with light', 'Cracked glass / color lines', 'Dim display / backlight dead', 'Dead pixels or ink blot patches']
   },
@@ -232,7 +238,7 @@ export const REPAIR_SERVICES: RepairServiceInfo[] = [
     startingPrice: 650,
     turnaroundTime: '45 - 90 Minutes',
     sameDayRepair: true,
-    homeVisitEligible: false,
+    isNegotiable: true,
     description: 'Keys not responding, water/tea spill damage, automatic typing ghost keys. Original replacement keyboards with or without backlight fitted at our workbench.',
     commonIssues: ['Automatic typing / ghost keys', 'Water or liquid spill damage', 'Missing keys / broken rubber dome', 'Backlight not turning on']
   },
@@ -244,7 +250,7 @@ export const REPAIR_SERVICES: RepairServiceInfo[] = [
     startingPrice: 1200,
     turnaroundTime: '30 - 60 Minutes',
     sameDayRepair: true,
-    homeVisitEligible: false,
+    isNegotiable: true,
     description: 'Laptop not holding charge, battery swelling up, or "Plugged in, not charging" error. OEM and high-capacity batteries tested on-the-spot with 6 to 12 months warranty.',
     commonIssues: ['Laptop dies instantly when unplugged', 'Battery swollen pushing touchpad up', 'Charger socket loose / DC jack broken', 'Overheating while charging']
   },
@@ -256,7 +262,7 @@ export const REPAIR_SERVICES: RepairServiceInfo[] = [
     startingPrice: 1499,
     turnaroundTime: '24 - 48 Hours',
     sameDayRepair: false,
-    homeVisitEligible: false,
+    isNegotiable: true,
     description: 'Dead laptop, short circuits, IC burning, BIOS corruption, or charging section IC failure. Repaired at our RPGT Road workbench using advanced BGA rework stations and oscilloscopes.',
     commonIssues: ['Completely dead with no LED indicator', 'Blue screen of death (BSOD) loops', 'Burning smell or spark from laptop', 'Liquid / juice spill short circuit']
   },
@@ -268,7 +274,7 @@ export const REPAIR_SERVICES: RepairServiceInfo[] = [
     startingPrice: 499,
     turnaroundTime: '45 Minutes',
     sameDayRepair: true,
-    homeVisitEligible: false,
+    isNegotiable: true,
     description: 'Loud fan noise, extreme heating, laptop shutting down suddenly while working or gaming. We clean out dust heatsinks and apply Arctic MX-4 thermal paste at our shop.',
     commonIssues: ['Laptop becomes very hot underneath', 'Fan making grinding or roaring noise', 'Shuts down automatically after 15 mins', 'Sluggish performance under load']
   },
@@ -280,7 +286,7 @@ export const REPAIR_SERVICES: RepairServiceInfo[] = [
     startingPrice: 350,
     turnaroundTime: '45 Minutes',
     sameDayRepair: true,
-    homeVisitEligible: false,
+    isNegotiable: true,
     description: 'Make your 5-year-old slow laptop run like a brand new rocket. Upgrade slow mechanical HDD to lightning NVMe SSD with 100% data preservation and OS cloning at our shop.',
     commonIssues: ['Taking 5-10 minutes just to turn on', '100% Disk Usage error in Windows', 'Freezing when opening Google Chrome', 'Insufficient memory errors']
   },
@@ -292,7 +298,7 @@ export const REPAIR_SERVICES: RepairServiceInfo[] = [
     startingPrice: 799,
     turnaroundTime: '3 - 5 Hours',
     sameDayRepair: false,
-    homeVisitEligible: false,
+    isNegotiable: true,
     description: 'Cracked laptop corners, screen separating from keyboard base, loose hinges making screen fall backwards. Specialized metallic reinforcement and plastic fabrication at our workbench.',
     commonIssues: ['Laptop lid does not open or close smoothly', 'Screen bezel popped out and cracking', 'Screw anchors broken inside casing', 'Base corner split open']
   },
@@ -304,7 +310,7 @@ export const REPAIR_SERVICES: RepairServiceInfo[] = [
     startingPrice: 399,
     turnaroundTime: 'Same Day / 24 Hours',
     sameDayRepair: true,
-    homeVisitEligible: false,
+    isNegotiable: true,
     description: 'Walk-in desktop PC repair at our RPGT Road shop. Power supply (SMPS) testing, graphics card diagnostic, no-display troubleshooting, and custom PC assembly.',
     commonIssues: ['PC powers on but no display output', 'Frequent random restarts or BSOD', 'SMPS failure or burnt smell', 'BIOS update and hardware compatibility']
   }

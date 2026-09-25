@@ -153,7 +153,7 @@ export default function TrackPage() {
           </div>
         )}
 
-        {/* Repair & Home Services Results */}
+        {/* In-Shop Repair Services Results */}
         {(activeType === 'all' || activeType === 'services') && (
           <div style={{ marginTop: '20px' }}>
             <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--secondary)', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -174,7 +174,7 @@ export default function TrackPage() {
                           Job Card #{booking.bookingNumber}
                         </div>
                         <div style={{ fontSize: '0.8rem', color: 'var(--gray-500)' }}>
-                          Booked on: {new Date(booking.createdAt).toLocaleDateString('en-IN')} • Customer: {booking.customerName}
+                          Received on: {new Date(booking.createdAt).toLocaleDateString('en-IN')} • Customer: {booking.customerName}
                         </div>
                       </div>
                       <div style={{ textAlign: 'right' }}>
@@ -182,7 +182,7 @@ export default function TrackPage() {
                           ● {booking.status}
                         </span>
                         <div style={{ fontSize: '0.8rem', color: 'var(--gray-500)', marginTop: '4px' }}>
-                          Slot: {booking.scheduledDate} ({booking.timeSlot})
+                          Received: {booking.scheduledDate}
                         </div>
                       </div>
                     </div>
