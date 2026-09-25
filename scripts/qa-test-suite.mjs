@@ -96,17 +96,17 @@ async function runTestSuite() {
     logTest('Product Detail Page Verification', false, err.message);
   }
 
-  // SUITE 4: Services & Home Visit System
-  console.log('\n--- Test Suite 4: Repair & Doorstep Home Visit Flow ---');
+  // SUITE 4: In-Shop Workbench Repair System
+  console.log('\n--- Test Suite 4: In-Shop Workbench Repair Flow ---');
   try {
     const servicesPage = await fetchUrl('/services');
     const shtml = servicesPage.body;
 
     logTest('Services Page Returns 200', servicesPage.statusCode === 200);
-    logTest('Home Visit Option Available', shtml.includes('Home Visit') || shtml.includes('Doorstep'));
-    logTest('Shop Drop-Off Option Available', shtml.includes('Drop at') || shtml.includes('Shop Drop'));
+    logTest('Walk-In Shop Repair Option Present', shtml.includes('Walk-In') || shtml.includes('Workbench') || shtml.includes('RPGT Road'));
+    logTest('Shop Drop-Off Workbench Available', shtml.includes('Workbench') || shtml.includes('Shop'));
     logTest('Screen Replacement Listed', shtml.includes('Screen Replacement'));
-    logTest('Booking Scheduler Form Present', shtml.includes('Book Repair') || shtml.includes('Confirm'));
+    logTest('In-Shop Job Card Form Present', shtml.includes('Job Card') || shtml.includes('Generate'));
     logTest('Hindupur Coverage Area Mentioned', shtml.includes('Hindupur'));
   } catch (err) {
     logTest('Services Verification', false, err.message);
@@ -157,7 +157,7 @@ async function runTestSuite() {
     logTest('Header Menu contains Gaming & Tower PCs link', hHtml.includes('/products?category=desktops'));
     logTest('Header Menu contains Consistent SSDs & RAM link', hHtml.includes('/products?category=components'));
     logTest('Header Menu contains Monitors link', hHtml.includes('/products?category=monitors'));
-    logTest('Header Menu contains Doorstep Home Service link', hHtml.includes('/services'));
+    logTest('Header Menu contains In-Shop Repair Lab link', hHtml.includes('/services'));
     logTest('Header Menu contains Track Status link', hHtml.includes('/track'));
 
     // Test desktops filtering

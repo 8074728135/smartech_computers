@@ -1037,14 +1037,12 @@ export default function AdminPage() {
                       <div style={{ fontSize: '0.75rem', color: 'var(--gray-500)' }}>{b.phone}</div>
                     </td>
                     <td>
-                      <span className={`badge ${b.serviceMode === 'home_visit' ? 'badge-primary' : 'badge-accent'}`}>
-                        {b.serviceMode === 'home_visit' ? '🏠 Home Visit' : '🏪 Shop Drop'}
+                      <span className="badge badge-accent">
+                        🏪 In-Shop Drop
                       </span>
-                      {b.serviceMode === 'home_visit' && (
-                        <div style={{ fontSize: '0.7rem', color: 'var(--gray-500)', marginTop: '2px', maxWidth: '160px' }}>
-                          PIN: {b.pincode}
-                        </div>
-                      )}
+                      <div style={{ fontSize: '0.7rem', color: 'var(--gray-500)', marginTop: '2px', maxWidth: '160px' }}>
+                        RPGT Road Workbench
+                      </div>
                     </td>
                     <td>
                       <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>{b.deviceType} ({b.deviceBrandModel})</div>

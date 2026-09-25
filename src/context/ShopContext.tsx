@@ -564,7 +564,7 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
     };
 
     setServiceBookings((prev) => [newBooking, ...prev]);
-    showToast(`Repair appointment #${bookingNumber} booked! Azeez / Smartech team will call you shortly on ${data.phone}.`, 'success');
+    showToast(`Repair job card #${bookingNumber} created! Bring your device to our RPGT Road shop for inspection.`, 'success');
     return newBooking;
   };
 
@@ -589,22 +589,22 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
     if (cleaned.startsWith('515')) {
       return {
         available: true,
-        homeServiceAvailable: true,
-        message: 'Same-Day Technician Home Visit & Express 2-Hour Delivery in Hindupur region!'
+        homeServiceAvailable: false,
+        message: 'Express 2-Hour Delivery for accessories & In-Shop Workbench Repair in Hindupur!'
       };
     }
     // Bengaluru / Nearby Karnataka PINs: 560xxx, 561xxx, 562xxx
     if (cleaned.startsWith('560') || cleaned.startsWith('561') || cleaned.startsWith('562')) {
       return {
         available: true,
-        homeServiceAvailable: true,
-        message: 'Next-Day Delivery & Scheduled Engineer Visits Available!'
+        homeServiceAvailable: false,
+        message: 'Next-Day Courier Delivery Available! In-shop repairs at our Hindupur workbench.'
       };
     }
     return {
       available: true,
       homeServiceAvailable: false,
-      message: 'All-India Insured Courier Delivery Available (2-4 Days). For Home Repair, drop at our RPGT Road shop or book courier pickup.'
+      message: 'All-India Insured Courier Delivery Available (2-4 Days). Repairs are handled at our RPGT Road shop.'
     };
   };
 

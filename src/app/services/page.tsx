@@ -7,7 +7,6 @@ import { useShop } from '@/context/ShopContext';
 import { REPAIR_SERVICES } from '@/lib/initialData';
 import { 
   Wrench, 
-  Home, 
   MapPin, 
   Calendar, 
   Clock, 
@@ -22,20 +21,19 @@ import {
   Keyboard,
   Fan,
   Sparkles,
-  MessageSquare
+  MessageSquare,
+  Store,
+  Check
 } from 'lucide-react';
 
 export default function ServicesPage() {
   const router = useRouter();
-  const { createServiceBooking, userPincode, checkDelivery, shopSettings, showToast } = useShop();
+  const { createServiceBooking, shopSettings, showToast } = useShop();
 
   const [selectedServiceId, setSelectedServiceId] = useState<string>('srv-1');
-  const [serviceMode, setServiceMode] = useState<'home_visit' | 'shop_dropoff'>('home_visit');
   const [customerName, setCustomerName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
-  const [address, setAddress] = useState('');
-  const [pincode, setPincode] = useState(userPincode || '515201');
   const [deviceType, setDeviceType] = useState<'Laptop' | 'Desktop PC' | 'Monitor' | 'Printer / Accessory' | 'Other'>('Laptop');
   const [deviceBrandModel, setDeviceBrandModel] = useState('');
   const [issueDescription, setIssueDescription] = useState('');
@@ -43,7 +41,7 @@ export default function ServicesPage() {
     const today = new Date();
     return today.toISOString().split('T')[0];
   });
-  const [timeSlot, setTimeSlot] = useState('2:00 PM - 5:00 PM');
+  const [timeSlot, setTimeSlot] = useState('Morning (10:00 AM – 1:00 PM)');
   const [submittedBooking, setSubmittedBooking] = useState<any>(null);
 
   const activeService = REPAIR_SERVICES.find(s => s.id === selectedServiceId) || REPAIR_SERVICES[0];
@@ -63,25 +61,18 @@ export default function ServicesPage() {
       return;
     }
 
-    if (serviceMode === 'home_visit' && (!address || !pincode)) {
-      showToast('Please provide your address and pincode in Hindupur for home visit.', 'error');
-      return;
-    }
-
     const booking = createServiceBooking({
       customerName,
       phone,
       email: email || `${phone}@customer.smartech.in`,
-      address: serviceMode === 'home_visit' 
-        ? address 
-        : `Shop Drop-off: ${shopSettings.storeName}, ${shopSettings.streetDetails}, ${shopSettings.locationDetails}`,
-      pincode: pincode || '515201',
+      address: `In-Shop Workbench: ${shopSettings.storeName}, ${shopSettings.streetDetails}, ${shopSettings.locationDetails}`,
+      pincode: shopSettings.pincode || '515201',
       city: shopSettings.city || 'Hindupur',
       deviceType,
       deviceBrandModel,
       issueCategory: activeService.category,
       issueDescription: `[${activeService.title}] ${issueDescription}`,
-      serviceMode,
+      serviceMode: 'shop_dropoff',
       scheduledDate,
       timeSlot,
       estimatedCost: activeService.startingPrice
@@ -90,46 +81,44 @@ export default function ServicesPage() {
     setSubmittedBooking(booking);
   };
 
-  const pinStatus = checkDelivery(pincode);
-
   return (
     <div className="services-page container">
       {/* Services Hero Header */}
       <div className="services-hero">
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.1)', padding: '6px 16px', borderRadius: '999px', fontSize: '0.85rem', color: '#93c5fd', marginBottom: '16px' }}>
-          <Sparkles size={16} /> {shopSettings.storeName} • Certified Repair Lab & Home Service
+          <Sparkles size={16} /> {shopSettings.storeName} • In-Shop Workbench Repair Lab
         </div>
-        <h1>Computer, Laptop & Accessory Repair</h1>
+        <h1>Computer, Laptop & Hardware Repairs</h1>
         <p>
-          Drop off at our <strong>RPGT Road workbench (Near Shilpa Hospital, Hindupur)</strong> or <strong>book our senior technician for Doorstep Home Visit</strong> anywhere in Hindupur, Lepakshi, Chilamathur, and Penukonda.
+          Bring your damaged product directly to our shop workbench: <strong>Near Shilpa Hospital, RPGT Road, Hindupur</strong>. Instant on-the-spot inspection, transparent estimate, and genuine replacement parts.
         </p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginTop: '24px', flexWrap: 'wrap' }}>
           <a href="#booking-wizard" className="btn btn-primary btn-lg">
-            <Calendar size={18} /> Schedule Repair Appointment
+            <Wrench size={18} /> Generate In-Shop Job Card
           </a>
           <a href={`tel:${shopSettings.primaryPhone}`} className="btn btn-secondary btn-lg" style={{ background: 'rgba(255,255,255,0.15)', color: 'white' }}>
-            <PhoneCall size={18} /> Urgent Helpline: {shopSettings.primaryPhone}
+            <PhoneCall size={18} /> Shop Workbench Call: {shopSettings.primaryPhone}
           </a>
         </div>
       </div>
 
-      {/* Mode Benefits Banner */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '40px' }}>
+      {/* In-Shop Workbench Highlights */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginBottom: '40px' }}>
         <div style={{ background: 'var(--white)', border: '2px solid #2563eb', borderRadius: 'var(--radius-xl)', padding: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
             <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'var(--primary-light)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Home size={22} />
+              <Store size={22} />
             </div>
             <div>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--secondary)' }}>Doorstep Home Service</h3>
-              <span style={{ fontSize: '0.75rem', color: 'var(--success)', fontWeight: 800 }}>ACTIVE ACROSS HINDUPUR</span>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--secondary)' }}>Walk-In Shop Repair</h3>
+              <span style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 800 }}>NEAR SHILPA HOSPITAL, RPGT ROAD</span>
             </div>
           </div>
           <p style={{ fontSize: '0.85rem', color: 'var(--gray-600)', lineHeight: 1.6 }}>
-            Our technician visits your home or office with diagnostic tools and replacement parts. Ideal for heavy desktop PC towers, broken laptop screens, battery swaps, and SSD speed upgrades.
+            Visit our shop with your damaged laptop, desktop PC, monitor, or printer. All repairs are done in our dedicated workbench lab with direct technician access.
           </p>
           <div style={{ marginTop: '14px', fontSize: '0.8rem', color: 'var(--primary)', fontWeight: 700 }}>
-            ✓ Base visit fee: ₹299 (Waived on service approval)
+            ✓ Store Open: 9:30 AM – 9:30 PM (All 7 Days)
           </div>
         </div>
 
@@ -139,15 +128,33 @@ export default function ServicesPage() {
               <Wrench size={22} />
             </div>
             <div>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--secondary)' }}>Smartech Shop Drop-Off</h3>
-              <span style={{ fontSize: '0.75rem', color: 'var(--gray-500)', fontWeight: 800 }}>RPGT ROAD, NEAR SHILPA HOSPITAL</span>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--secondary)' }}>Free 15-Min Diagnosis</h3>
+              <span style={{ fontSize: '0.75rem', color: '#7c3aed', fontWeight: 800 }}>FRONT-OF-DESK INSPECTION</span>
             </div>
           </div>
           <p style={{ fontSize: '0.85rem', color: 'var(--gray-600)', lineHeight: 1.6 }}>
-            Bring your laptop directly to our workbench in Hindupur. Quick 15-minute diagnosis in front of you. Equipped with BGA rework stations and oscilloscopes for complex dead motherboard repairs.
+            We inspect your device on our test bench right in front of you. We verify motherboard power lines, test screen display cables, and give you an exact price quote before starting.
           </p>
           <div style={{ marginTop: '14px', fontSize: '0.8rem', color: '#7c3aed', fontWeight: 700 }}>
-            ✓ Free 15-minute workbench diagnosis
+            ✓ Zero hidden costs • Clear estimate upfront
+          </div>
+        </div>
+
+        <div style={{ background: 'var(--white)', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-xl)', padding: '24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+            <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: '#dcfce7', color: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <ShieldCheck size={22} />
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--secondary)' }}>Genuine Parts & Warranty</h3>
+              <span style={{ fontSize: '0.75rem', color: '#16a34a', fontWeight: 800 }}>TESTED BENCH INVENTORY</span>
+            </div>
+          </div>
+          <p style={{ fontSize: '0.85rem', color: 'var(--gray-600)', lineHeight: 1.6 }}>
+            Original Consistent SSDs, RAM modules, A+ grade IPS display panels, laptop batteries, and chargers kept in stock for instant same-day replacements.
+          </p>
+          <div style={{ marginTop: '14px', fontSize: '0.8rem', color: '#16a34a', fontWeight: 700 }}>
+            ✓ Warranty backed on all parts & labor
           </div>
         </div>
       </div>
@@ -155,8 +162,8 @@ export default function ServicesPage() {
       {/* Services Catalog */}
       <div style={{ marginBottom: '60px' }}>
         <div style={{ textAlign: 'center', maxWidth: '600px', margin: '0 auto 36px' }}>
-          <h2 className="section-title">Common Repair & Upgrade Services</h2>
-          <p style={{ color: 'var(--gray-500)' }}>Select any service to pre-fill your booking form below</p>
+          <h2 className="section-title">In-Shop Repair & Upgrade Services</h2>
+          <p style={{ color: 'var(--gray-500)' }}>Select your required service below to pre-generate your workbench Job Card</p>
         </div>
 
         <div className="services-grid">
@@ -171,12 +178,14 @@ export default function ServicesPage() {
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <span className="badge badge-primary">{srv.category}</span>
-                {srv.homeVisitEligible ? (
+                {srv.sameDayRepair ? (
                   <span className="badge badge-success" style={{ fontSize: '0.7rem' }}>
-                    <Home size={12} style={{ display: 'inline', marginRight: '3px' }} /> Home Visit OK
+                    ⚡ Same-Day Workbench Fix
                   </span>
                 ) : (
-                  <span className="badge badge-warning" style={{ fontSize: '0.7rem' }}>Lab Only</span>
+                  <span className="badge badge-warning" style={{ fontSize: '0.7rem' }}>
+                    🔬 Chip-Level Lab
+                  </span>
                 )}
               </div>
 
@@ -186,7 +195,7 @@ export default function ServicesPage() {
               {/* Symptoms */}
               <div style={{ margin: '14px 0', borderTop: '1px solid var(--gray-100)', paddingTop: '10px' }}>
                 <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--gray-500)', textTransform: 'uppercase', marginBottom: '6px' }}>
-                  Common Signs:
+                  Common Signs / Issues:
                 </div>
                 <ul style={{ fontSize: '0.8rem', color: 'var(--gray-600)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
                   {srv.commonIssues.slice(0, 2).map((issue, idx) => (
@@ -217,7 +226,7 @@ export default function ServicesPage() {
                 className={`btn ${selectedServiceId === srv.id ? 'btn-primary' : 'btn-outline'}`}
                 onClick={() => handleServiceSelect(srv.id)}
               >
-                {selectedServiceId === srv.id ? 'Selected in Form' : 'Book This Service'}
+                {selectedServiceId === srv.id ? 'Selected for Job Card' : 'Select Service'}
               </button>
             </div>
           ))}
@@ -232,26 +241,26 @@ export default function ServicesPage() {
               <CheckCircle2 size={40} />
             </div>
             <h2 style={{ fontSize: '1.8rem', fontWeight: 900, color: 'var(--secondary)' }}>
-              Appointment Confirmed with {shopSettings.storeName}!
+              In-Shop Repair Job Card Generated!
             </h2>
-            <div style={{ fontSize: '1.15rem', color: 'var(--primary)', fontWeight: 800, margin: '8px 0 16px', fontFamily: 'var(--font-mono)' }}>
+            <div style={{ fontSize: '1.25rem', color: 'var(--primary)', fontWeight: 800, margin: '8px 0 16px', fontFamily: 'var(--font-mono)' }}>
               Job Card No: #{submittedBooking.bookingNumber}
             </div>
-            <p style={{ color: 'var(--gray-600)', maxWidth: '540px', margin: '0 auto 24px', lineHeight: 1.6 }}>
-              Thank you, <strong>{submittedBooking.customerName}</strong>. {shopSettings.ownerName} or our senior repair coordinator will contact you at <strong>{submittedBooking.phone}</strong> to confirm your technician visit for {submittedBooking.scheduledDate} ({submittedBooking.timeSlot}).
+            <p style={{ color: 'var(--gray-600)', maxWidth: '560px', margin: '0 auto 24px', lineHeight: 1.6 }}>
+              Thank you, <strong>{submittedBooking.customerName}</strong>. Please bring your damaged device to our shop workbench: <strong>Smartech Computers, Near Shilpa Hospital, RPGT Road, Hindupur</strong>. Show this Job Card number at the counter for priority diagnosis.
             </p>
 
-            <div style={{ background: 'var(--gray-50)', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-lg)', maxWidth: '500px', margin: '0 auto 28px', padding: '20px', textAlign: 'left', fontSize: '0.9rem' }}>
-              <div style={{ marginBottom: '8px' }}><strong>Service Mode:</strong> {submittedBooking.serviceMode === 'home_visit' ? '🏠 Doorstep Home Service' : '🏪 Shop Drop-Off'}</div>
+            <div style={{ background: 'var(--gray-50)', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-lg)', maxWidth: '520px', margin: '0 auto 28px', padding: '20px', textAlign: 'left', fontSize: '0.9rem' }}>
+              <div style={{ marginBottom: '8px' }}><strong>Service Location:</strong> 🏪 In-Shop Drop-off (RPGT Road, Near Shilpa Hospital)</div>
+              <div style={{ marginBottom: '8px' }}><strong>Shop Timings:</strong> Monday to Sunday: 9:30 AM – 9:30 PM</div>
               <div style={{ marginBottom: '8px' }}><strong>Device:</strong> {submittedBooking.deviceType} ({submittedBooking.deviceBrandModel})</div>
-              <div style={{ marginBottom: '8px' }}><strong>Address:</strong> {submittedBooking.address}</div>
-              <div style={{ marginBottom: '8px' }}><strong>Slot:</strong> {submittedBooking.scheduledDate} at {submittedBooking.timeSlot}</div>
+              <div style={{ marginBottom: '8px' }}><strong>Drop-off Target:</strong> {submittedBooking.scheduledDate} ({submittedBooking.timeSlot})</div>
               <div><strong>Initial Estimate:</strong> ₹{submittedBooking.estimatedCost.toLocaleString('en-IN')} (Parts confirmed on inspection)</div>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
               <a 
-                href={`https://wa.me/91${shopSettings.whatsappNumber}?text=Hi%20Smartech%20Computers,%20I%20have%20booked%20repair%20job%20card%20#${submittedBooking.bookingNumber}%20for%20my%20${encodeURIComponent(submittedBooking.deviceBrandModel)}.%20Please%20confirm%20technician.`}
+                href={`https://wa.me/91${shopSettings.whatsappNumber}?text=Hi%20Smartech%20Computers,%20I%20have%20registered%20in-shop%20repair%20Job%20Card%20#${submittedBooking.bookingNumber}%20for%20my%20${encodeURIComponent(submittedBooking.deviceBrandModel)}.%20I%20will%20bring%20it%20to%20the%20shop.`}
                 target="_blank"
                 rel="noreferrer"
                 className="btn btn-outline"
@@ -266,60 +275,22 @@ export default function ServicesPage() {
                 onClick={() => setSubmittedBooking(null)}
                 className="btn btn-ghost"
               >
-                Book Another Device
+                Register Another Device
               </button>
             </div>
           </div>
         ) : (
           <>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
               <div>
-                <h2>Book Repair or Home Visit in Hindupur</h2>
+                <h2>Create In-Shop Repair Job Card</h2>
                 <p>
                   Selected service: <strong style={{ color: 'var(--primary)' }}>{activeService.title}</strong> (Starts from ₹{activeService.startingPrice})
                 </p>
               </div>
 
-              {/* Service Mode Selector Buttons */}
-              <div style={{ display: 'flex', background: 'var(--gray-100)', padding: '4px', borderRadius: 'var(--radius-md)' }}>
-                <button
-                  type="button"
-                  onClick={() => setServiceMode('home_visit')}
-                  style={{
-                    padding: '8px 16px',
-                    borderRadius: 'var(--radius-sm)',
-                    border: 'none',
-                    fontWeight: 700,
-                    fontSize: '0.85rem',
-                    cursor: 'pointer',
-                    background: serviceMode === 'home_visit' ? 'var(--primary)' : 'transparent',
-                    color: serviceMode === 'home_visit' ? 'white' : 'var(--gray-600)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px'
-                  }}
-                >
-                  <Home size={15} /> Home Visit (Hindupur)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setServiceMode('shop_dropoff')}
-                  style={{
-                    padding: '8px 16px',
-                    borderRadius: 'var(--radius-sm)',
-                    border: 'none',
-                    fontWeight: 700,
-                    fontSize: '0.85rem',
-                    cursor: 'pointer',
-                    background: serviceMode === 'shop_dropoff' ? 'var(--secondary)' : 'transparent',
-                    color: serviceMode === 'shop_dropoff' ? 'white' : 'var(--gray-600)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px'
-                  }}
-                >
-                  <Wrench size={15} /> Drop at RPGT Road Shop
-                </button>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#eff6ff', border: '1px solid #bfdbfe', padding: '8px 16px', borderRadius: 'var(--radius-md)', color: '#1e40af', fontSize: '0.85rem', fontWeight: 700 }}>
+                <Store size={16} /> Walk-In Repair at RPGT Road Shop
               </div>
             </div>
 
@@ -375,54 +346,8 @@ export default function ServicesPage() {
                 />
               </div>
 
-              {/* Conditional Address if Home Visit */}
-              {serviceMode === 'home_visit' && (
-                <>
-                  <div className="input-group full-width">
-                    <label className="input-label">Home / Office Address for Technician Visit *</label>
-                    <input 
-                      type="text" 
-                      className="input" 
-                      placeholder="Door No, Street Name, Area/Colony, Landmark in Hindupur"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      required={serviceMode === 'home_visit'}
-                    />
-                  </div>
-
-                  <div className="input-group">
-                    <label className="input-label">Area Pincode *</label>
-                    <input 
-                      type="text" 
-                      className="input" 
-                      placeholder="515201"
-                      maxLength={6}
-                      value={pincode}
-                      onChange={(e) => setPincode(e.target.value.replace(/\D/g, ''))}
-                      required={serviceMode === 'home_visit'}
-                    />
-                    {pinStatus && (
-                      <span style={{ fontSize: '0.75rem', color: pinStatus.homeServiceAvailable ? 'var(--success)' : 'var(--danger)', marginTop: '2px' }}>
-                        {pinStatus.homeServiceAvailable ? '✓ Same-Day Technician Visit Available' : '⚠️ Area outside normal dispatch; drop at shop recommended'}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="input-group">
-                    <label className="input-label">Email ID (for digital receipt)</label>
-                    <input 
-                      type="email" 
-                      className="input" 
-                      placeholder="customer@gmail.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </div>
-                </>
-              )}
-
               <div className="input-group">
-                <label className="input-label">Preferred Date *</label>
+                <label className="input-label">Expected Drop-Off Date *</label>
                 <input 
                   type="date" 
                   className="input" 
@@ -433,32 +358,47 @@ export default function ServicesPage() {
               </div>
 
               <div className="input-group">
-                <label className="input-label">Preferred Time Slot *</label>
+                <label className="input-label">Approximate Visit Time *</label>
                 <select 
                   className="input"
                   value={timeSlot}
                   onChange={(e) => setTimeSlot(e.target.value)}
                 >
-                  <option value="10:00 AM - 1:00 PM">Morning (10:00 AM – 1:00 PM)</option>
-                  <option value="2:00 PM - 5:00 PM">Afternoon (2:00 PM – 5:00 PM)</option>
-                  <option value="5:00 PM - 8:00 PM">Evening (5:00 PM – 8:00 PM)</option>
+                  <option value="Morning (10:00 AM – 1:00 PM)">Morning (10:00 AM – 1:00 PM)</option>
+                  <option value="Afternoon (1:00 PM – 5:00 PM)">Afternoon (1:00 PM – 5:00 PM)</option>
+                  <option value="Evening (5:00 PM – 9:00 PM)">Evening (5:00 PM – 9:00 PM)</option>
+                  <option value="Walk-In Anytime (9:30 AM – 9:30 PM)">Walk-In Anytime (9:30 AM – 9:30 PM)</option>
                 </select>
               </div>
 
+              <div className="input-group">
+                <label className="input-label">Email ID (Optional, for digital receipt)</label>
+                <input 
+                  type="email" 
+                  className="input" 
+                  placeholder="customer@gmail.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+
               <div className="input-group full-width">
-                <label className="input-label">Describe the Problem or Symptoms *</label>
+                <label className="input-label">Describe the Damaged Part or Problem *</label>
                 <textarea 
                   className="input" 
-                  placeholder="e.g. Screen has black lines, fan making loud noise, tea spilled on keyboard, laptop dead with no LED light..."
+                  placeholder="e.g. Screen has black lines, laptop not turning on, tea spilled on keyboard, fan making loud noise, hinges broken..."
                   value={issueDescription}
                   onChange={(e) => setIssueDescription(e.target.value)}
                   required 
                 />
               </div>
 
+              <div className="full-width" style={{ background: '#f8fafc', padding: '14px 18px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '0.85rem', color: '#475569', marginBottom: '8px' }}>
+                📍 <strong>Shop Location:</strong> Smartech Computers, RPGT Road, Near Shilpa Hospital, Hindupur. Bring your damaged device with charger/power cord for accurate workbench testing.
+              </div>
+
               <button type="submit" className="btn btn-primary btn-lg">
-                <CheckCircle2 size={20} /> 
-                {serviceMode === 'home_visit' ? 'Confirm Home Service Booking' : 'Confirm Shop Drop-Off Slot'}
+                <Wrench size={20} /> Generate In-Shop Repair Job Card
               </button>
             </form>
           </>

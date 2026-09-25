@@ -54,8 +54,8 @@ export default function Footer() {
                 <Wrench size={26} />
               </div>
               <div>
-                <h4 style={{ color: 'white', fontSize: '0.95rem', fontWeight: 700 }}>Doorstep Home Service</h4>
-                <p style={{ color: '#94a3b8', fontSize: '0.8rem', marginTop: '2px' }}>Senior technician visits your home/office</p>
+                <h4 style={{ color: 'white', fontSize: '0.95rem', fontWeight: 700 }}>In-Shop Workbench Repair</h4>
+                <p style={{ color: '#94a3b8', fontSize: '0.8rem', marginTop: '2px' }}>Bring damaged devices for instant diagnosis</p>
               </div>
             </div>
 
@@ -134,7 +134,7 @@ export default function Footer() {
         <div>
           <h4 className="footer-heading">Repair Services</h4>
           <div className="footer-links">
-            <Link href="/services" className="footer-link">Doorstep Home Visit (Hindupur)</Link>
+            <Link href="/services" className="footer-link">In-Shop Walk-In Repair</Link>
             <Link href="/services" className="footer-link">Laptop Screen Replacement</Link>
             <Link href="/services" className="footer-link">Keyboard & Touchpad Repairs</Link>
             <Link href="/services" className="footer-link">Battery & DC Jack Replacement</Link>
@@ -196,7 +196,7 @@ export default function Footer() {
           </div>
           <div className="footer-bottom-links">
             <Link href="/services">Warranty Policy</Link>
-            <Link href="/services">Home Service Terms</Link>
+            <Link href="/services">Repair & Service Terms</Link>
             <Link href="/admin">Owner Portal</Link>
           </div>
         </div>

@@ -134,7 +134,7 @@ export default function Header() {
                 💬 WhatsApp Order
               </a>
               <span style={{ opacity: 0.4 }}>|</span>
-              <Link href="/services">Home Service Booking</Link>
+              <Link href="/services">In-Shop Repair Services</Link>
               <span style={{ opacity: 0.4 }}>|</span>
               <Link href="/track">Track Repair / Order</Link>
               <span style={{ opacity: 0.4 }}>|</span>
@@ -221,11 +221,11 @@ export default function Header() {
             className="header-action-btn"
             style={{ flexDirection: 'row', gap: '6px', textAlign: 'left', padding: '6px 12px', background: 'var(--gray-100)', borderRadius: 'var(--radius-md)' }}
             onClick={() => setIsPinModalOpen(true)}
-            title="Click to verify delivery / home repair service at your PIN"
+            title="Click to check product delivery and store pickup"
           >
             <MapPin size={18} style={{ color: 'var(--primary)', flexShrink: 0 }} />
             <div>
-              <div style={{ fontSize: '0.68rem', color: 'var(--gray-500)', lineHeight: 1 }}>Deliver & Service at</div>
+              <div style={{ fontSize: '0.68rem', color: 'var(--gray-500)', lineHeight: 1 }}>Delivery & Pickup at</div>
               <div style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--gray-800)', lineHeight: 1.2 }}>
                 {userPincode ? `PIN ${userPincode} (Hindupur)` : 'Enter PIN'}
               </div>
@@ -526,7 +526,7 @@ export default function Header() {
               className={`nav-link nav-link-highlight ${pathname === '/services' ? 'active' : ''}`} 
               style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
             >
-              <Home size={15} /> Doorstep Home Service (Hindupur)
+              <Wrench size={15} /> In-Shop Repair Lab (Hindupur)
             </Link>
             <Link 
               href="/track" 
@@ -622,7 +622,7 @@ export default function Header() {
           <Link href="/products?category=components" className={`mobile-nav-link ${pathname === '/products' && currentCategory === 'components' ? 'active' : ''}`} onClick={() => setMobileMenuOpen(false)}>Consistent SSDs & RAM Upgrades</Link>
           <Link href="/products?category=monitors" className={`mobile-nav-link ${pathname === '/products' && currentCategory === 'monitors' ? 'active' : ''}`} onClick={() => setMobileMenuOpen(false)}>Monitors & Displays</Link>
           <Link href="/services" className={`mobile-nav-link ${pathname === '/services' ? 'active' : ''}`} onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--primary)', fontWeight: 700 }}>
-            🔧 Repair Services & Home Visit
+            🔧 In-Shop Repair Services
           </Link>
           <Link href="/track" className={`mobile-nav-link ${pathname === '/track' ? 'active' : ''}`} onClick={() => setMobileMenuOpen(false)}>Track Status</Link>
           {isOwnerAuthenticated && currentUser?.email.toLowerCase() === 'azeez@smartechcomputers.com' && (
@@ -681,8 +681,8 @@ export default function Header() {
                 <MapPin size={22} />
               </div>
               <div>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--secondary)' }}>Check Delivery & Home Service</h3>
-                <p style={{ fontSize: '0.85rem', color: 'var(--gray-500)' }}>Smartech Computers provides doorstep home service across Hindupur</p>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--secondary)' }}>Check Delivery & Store Pickup</h3>
+                <p style={{ fontSize: '0.85rem', color: 'var(--gray-500)' }}>Check product delivery & in-shop workbench repair at RPGT Road, Hindupur</p>
               </div>
             </div>
 

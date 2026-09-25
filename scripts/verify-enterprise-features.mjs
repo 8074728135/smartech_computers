@@ -53,7 +53,7 @@ async function runVerification() {
   // 4. Verify Services and Track Pages
   const services = await fetchUrl('/services');
   test('Services Page loads HTTP 200', services.status === 200);
-  test('Hindupur doorstep home visit option present', services.body.includes('Hindupur') && services.body.includes('Home Visit'));
+  test('Hindupur in-shop workbench repair option present', services.body.includes('Hindupur') && (services.body.includes('Workbench') || services.body.includes('Walk-In') || services.body.includes('RPGT Road')));
 
   const track = await fetchUrl('/track');
   test('Order/Repair tracking loads HTTP 200', track.status === 200);

@@ -49,7 +49,7 @@ export interface CartItem {
   quantity: number;
 }
 
-export type ServiceMode = 'home_visit' | 'shop_dropoff';
+export type ServiceMode = 'shop_dropoff';
 
 export type ServiceStatus = 
   | 'Received' 
@@ -124,7 +124,8 @@ export interface RepairServiceInfo {
   icon: string;
   startingPrice: number;
   turnaroundTime: string;
-  homeVisitEligible: boolean;
+  sameDayRepair?: boolean;
+  homeVisitEligible?: boolean;
   description: string;
   commonIssues: string[];
 }

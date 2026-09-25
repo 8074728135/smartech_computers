@@ -16,8 +16,8 @@ export const viewport = {
 
 export const metadata: Metadata = {
   title: 'SMARTECH COMPUTERS Hindupur | Refurbished Laptops, PARADOX Accessories & Repairs',
-  description: 'Smartech Computers, Near Shilpa Hospital, RPGT Road, Hindupur. Consistent PARADOX gaming keyboards, certified refurbished laptops, gaming PCs, and doorstep home service across Hindupur.',
-  keywords: 'Smartech Computers Hindupur, RPGT Road Shilpa Hospital, Paradox gaming keyboard, refurbished laptops Hindupur, laptop repair Hindupur, Consistent SSD, Azeez Smartech, home computer service Hindupur',
+  description: 'Smartech Computers, Near Shilpa Hospital, RPGT Road, Hindupur. Consistent PARADOX gaming keyboards, certified refurbished laptops, gaming PCs, and in-shop expert repairs & upgrades.',
+  keywords: 'Smartech Computers Hindupur, RPGT Road Shilpa Hospital, Paradox gaming keyboard, refurbished laptops Hindupur, laptop repair Hindupur, Consistent SSD, shop computer repair Hindupur, workbench repair',
   authors: [{ name: 'SMARTECH COMPUTERS' }],
 };
 

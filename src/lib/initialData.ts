@@ -13,7 +13,7 @@ export const DEFAULT_SHOP_SETTINGS: ShopSettings = {
   pincode: '515201',
   timings: 'Monday to Sunday: 9:30 AM – 9:30 PM',
   upiId: '9030400551@ybl',
-  announcement: 'Special Offer: Consistent PARADOX Gaming Keyboards & Certified Refurbished Laptops! Home Visit Service in Hindupur & nearby areas.',
+  announcement: 'Special Offer: Consistent PARADOX Gaming Keyboards & Certified Refurbished Laptops! In-Shop Workbench Repair at RPGT Road, Hindupur.',
   serviceAreas: [
     'Hindupur Town (All Wards)',
     'RPGT Road & Shilpa Hospital Area',
@@ -53,7 +53,7 @@ export const INITIAL_PRODUCTS: Product[] = [
       'Write Speed': 'Up to 1,800 MB/s',
       'Form Factor': 'M.2 2280'
     },
-    description: 'Supercharge any slow laptop or desktop in 15 minutes! Free data cloning and Windows 11 installation available at Smartech Computers Hindupur or on doorstep home visits.',
+    description: 'Supercharge any slow laptop or desktop in 15 minutes! Free data cloning and Windows 11 installation available at Smartech Computers RPGT Road workbench.',
     conditionSummary: 'Brand new sealed packaging with 3-year warranty.',
     isDailyDeal: true,
     isFeatured: true,
@@ -219,8 +219,9 @@ export const REPAIR_SERVICES: RepairServiceInfo[] = [
     icon: 'Monitor',
     startingPrice: 1899,
     turnaroundTime: '1 - 2 Hours',
-    homeVisitEligible: true,
-    description: 'Cracked, broken, lines on display, or blank screen. 100% original A+ grade replacement screens for Dell, HP, Lenovo, Acer, Asus, Apple, etc. Available at shop or doorstep home visit in Hindupur.',
+    sameDayRepair: true,
+    homeVisitEligible: false,
+    description: 'Cracked, broken, lines on display, or blank screen. 100% original A+ grade replacement screens for Dell, HP, Lenovo, Acer, Asus, Apple, etc. Fitted directly at our RPGT Road shop workbench in Hindupur.',
     commonIssues: ['Black screen with light', 'Cracked glass / color lines', 'Dim display / backlight dead', 'Dead pixels or ink blot patches']
   },
   {
@@ -230,8 +231,9 @@ export const REPAIR_SERVICES: RepairServiceInfo[] = [
     icon: 'Keyboard',
     startingPrice: 650,
     turnaroundTime: '45 - 90 Minutes',
-    homeVisitEligible: true,
-    description: 'Keys not responding, water/tea spill damage, automatic typing ghost keys. Original replacement keyboards with or without backlight in stock.',
+    sameDayRepair: true,
+    homeVisitEligible: false,
+    description: 'Keys not responding, water/tea spill damage, automatic typing ghost keys. Original replacement keyboards with or without backlight fitted at our workbench.',
     commonIssues: ['Automatic typing / ghost keys', 'Water or liquid spill damage', 'Missing keys / broken rubber dome', 'Backlight not turning on']
   },
   {
@@ -241,8 +243,9 @@ export const REPAIR_SERVICES: RepairServiceInfo[] = [
     icon: 'BatteryCharging',
     startingPrice: 1200,
     turnaroundTime: '30 - 60 Minutes',
-    homeVisitEligible: true,
-    description: 'Laptop not holding charge, battery swelling up, or "Plugged in, not charging" error. OEM and high-capacity batteries with 6 to 12 months warranty.',
+    sameDayRepair: true,
+    homeVisitEligible: false,
+    description: 'Laptop not holding charge, battery swelling up, or "Plugged in, not charging" error. OEM and high-capacity batteries tested on-the-spot with 6 to 12 months warranty.',
     commonIssues: ['Laptop dies instantly when unplugged', 'Battery swollen pushing touchpad up', 'Charger socket loose / DC jack broken', 'Overheating while charging']
   },
   {
@@ -252,6 +255,7 @@ export const REPAIR_SERVICES: RepairServiceInfo[] = [
     icon: 'Cpu',
     startingPrice: 1499,
     turnaroundTime: '24 - 48 Hours',
+    sameDayRepair: false,
     homeVisitEligible: false,
     description: 'Dead laptop, short circuits, IC burning, BIOS corruption, or charging section IC failure. Repaired at our RPGT Road workbench using advanced BGA rework stations and oscilloscopes.',
     commonIssues: ['Completely dead with no LED indicator', 'Blue screen of death (BSOD) loops', 'Burning smell or spark from laptop', 'Liquid / juice spill short circuit']
@@ -263,8 +267,9 @@ export const REPAIR_SERVICES: RepairServiceInfo[] = [
     icon: 'Fan',
     startingPrice: 499,
     turnaroundTime: '45 Minutes',
-    homeVisitEligible: true,
-    description: 'Loud fan noise, extreme heating, laptop shutting down suddenly while working or gaming. We clean out dust heatsinks and apply Arctic MX-4 thermal paste.',
+    sameDayRepair: true,
+    homeVisitEligible: false,
+    description: 'Loud fan noise, extreme heating, laptop shutting down suddenly while working or gaming. We clean out dust heatsinks and apply Arctic MX-4 thermal paste at our shop.',
     commonIssues: ['Laptop becomes very hot underneath', 'Fan making grinding or roaring noise', 'Shuts down automatically after 15 mins', 'Sluggish performance under load']
   },
   {
@@ -274,8 +279,9 @@ export const REPAIR_SERVICES: RepairServiceInfo[] = [
     icon: 'HardDrive',
     startingPrice: 350,
     turnaroundTime: '45 Minutes',
-    homeVisitEligible: true,
-    description: 'Make your 5-year-old slow laptop run like a brand new rocket. Upgrade slow mechanical HDD to lightning NVMe SSD with 100% data preservation and OS cloning.',
+    sameDayRepair: true,
+    homeVisitEligible: false,
+    description: 'Make your 5-year-old slow laptop run like a brand new rocket. Upgrade slow mechanical HDD to lightning NVMe SSD with 100% data preservation and OS cloning at our shop.',
     commonIssues: ['Taking 5-10 minutes just to turn on', '100% Disk Usage error in Windows', 'Freezing when opening Google Chrome', 'Insufficient memory errors']
   },
   {
@@ -285,20 +291,22 @@ export const REPAIR_SERVICES: RepairServiceInfo[] = [
     icon: 'Wrench',
     startingPrice: 799,
     turnaroundTime: '3 - 5 Hours',
+    sameDayRepair: false,
     homeVisitEligible: false,
-    description: 'Cracked laptop corners, screen separating from keyboard base, loose hinges making screen fall backwards. Specialized metallic reinforcement and plastic fabrication.',
+    description: 'Cracked laptop corners, screen separating from keyboard base, loose hinges making screen fall backwards. Specialized metallic reinforcement and plastic fabrication at our workbench.',
     commonIssues: ['Laptop lid does not open or close smoothly', 'Screen bezel popped out and cracking', 'Screw anchors broken inside casing', 'Base corner split open']
   },
   {
     id: 'srv-8',
-    title: 'Doorstep Home Service Visit (Hindupur & Surroundings)',
-    category: 'Doorstep Service',
-    icon: 'Home',
-    startingPrice: 299,
-    turnaroundTime: 'Same Day (2 - 4 Hours)',
-    homeVisitEligible: true,
-    description: 'Senior hardware engineer visits your home or office with diagnostic tools. Perfect for desktop PCs, multiple systems, office networking, and home diagnostics in Hindupur, Lepakshi, Chilamathur, and Penukonda.',
-    commonIssues: ['Desktop PC not booting or displaying output', 'Wi-Fi / LAN printer connection issues', 'Multiple office PCs need maintenance', 'Heavy desktop tower difficult to carry']
+    title: 'Desktop PC & Custom Tower Repair (In-Shop)',
+    category: 'Desktop & Towers',
+    icon: 'Cpu',
+    startingPrice: 399,
+    turnaroundTime: 'Same Day / 24 Hours',
+    sameDayRepair: true,
+    homeVisitEligible: false,
+    description: 'Walk-in desktop PC repair at our RPGT Road shop. Power supply (SMPS) testing, graphics card diagnostic, no-display troubleshooting, and custom PC assembly.',
+    commonIssues: ['PC powers on but no display output', 'Frequent random restarts or BSOD', 'SMPS failure or burnt smell', 'BIOS update and hardware compatibility']
   }
 ];
 
@@ -377,9 +385,9 @@ export const INITIAL_SERVICES: ServiceBooking[] = [
     deviceBrandModel: 'Dell Inspiron 15 3567',
     issueCategory: 'Screen & Display',
     issueDescription: 'Laptop screen cracked after falling from desk. White vertical patches showing.',
-    serviceMode: 'home_visit',
+    serviceMode: 'shop_dropoff',
     scheduledDate: '2026-09-24',
-    timeSlot: '2:00 PM - 5:00 PM',
+    timeSlot: 'Store Hours Walk-In',
     status: 'Technician Assigned',
     estimatedCost: 2600,
     technicianName: 'Azeez (Senior Hardware Tech)',

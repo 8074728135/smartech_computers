@@ -86,7 +86,7 @@ export default function TrackPage() {
             className={`btn btn-sm ${activeType === 'services' ? 'btn-secondary' : 'btn-ghost'}`}
             onClick={() => setActiveType('services')}
           >
-            <Wrench size={14} /> Repair & Home Visits ({matchedServices.length})
+            <Wrench size={14} /> In-Shop Repair Job Cards ({matchedServices.length})
           </button>
         </div>
       </div>
@@ -157,7 +157,7 @@ export default function TrackPage() {
         {(activeType === 'all' || activeType === 'services') && (
           <div style={{ marginTop: '20px' }}>
             <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--secondary)', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Wrench size={20} style={{ color: '#7c3aed' }} /> Repair Job Cards & Home Visits
+              <Wrench size={20} style={{ color: '#7c3aed' }} /> In-Shop Repair Job Cards
             </h3>
 
             {matchedServices.length === 0 ? (
@@ -189,7 +189,7 @@ export default function TrackPage() {
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '16px', fontSize: '0.88rem' }}>
                       <div>
-                        <div><strong>Service Mode:</strong> {booking.serviceMode === 'home_visit' ? '🏠 Doorstep Home Visit' : '🏪 Shop Drop-Off'}</div>
+                        <div><strong>Service Mode:</strong> 🏪 In-Shop Drop-Off</div>
                         <div><strong>Device:</strong> {booking.deviceType} - {booking.deviceBrandModel}</div>
                         <div><strong>Category:</strong> {booking.issueCategory}</div>
                       </div>
@@ -197,7 +197,7 @@ export default function TrackPage() {
                       <div>
                         <div><strong>Assigned Tech:</strong> {booking.technicianName || 'Assigning soon...'}</div>
                         <div><strong>Initial Estimate:</strong> ₹{booking.estimatedCost.toLocaleString('en-IN')}</div>
-                        <div><strong>Address:</strong> {booking.address}</div>
+                        <div><strong>Service Location:</strong> {booking.address}</div>
                       </div>
                     </div>
 
