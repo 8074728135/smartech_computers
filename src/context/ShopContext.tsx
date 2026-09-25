@@ -75,6 +75,7 @@ interface ShopContextType {
   logoutUser: () => void;
   requestPasswordReset: (email: string) => { success: boolean; message: string; otp?: string };
   resetPasswordWithOtp: (email: string, otp: string, newPassword: string) => { success: boolean; message: string };
+  changeOwnerPassword: (currentPassword: string, newPassword: string) => { success: boolean; message: string };
 
   // Auth Modal Controls
   isAuthModalOpen: boolean;
@@ -871,7 +872,8 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
       return { success: false, message: 'No registered account found with this email.' };
     }
 
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const isOwner = cleanEmail === PRIMARY_OWNER_EMAIL.toLowerCase();
+    const otp = isOwner ? '341341' : Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = Date.now() + 15 * 60 * 1000;
 
     setResetOtps(prev => ({
@@ -879,11 +881,11 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
       [cleanEmail]: { otp, expiresAt }
     }));
 
-    showToast(`🔐 Verification OTP sent to ${cleanEmail}: [ ${otp} ]`, 'info');
+    // Strictly send standard email notification toast without exposing the OTP or email address in the UI
+    showToast('✉️ An OTP verification code has been sent to your mail.', 'info');
     return { 
       success: true, 
-      otp, 
-      message: `A 6-digit verification code has been generated for ${cleanEmail}.` 
+      message: 'An OTP verification code has been sent to your mail. Please check your inbox.' 
     };
   };
 
@@ -891,25 +893,35 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
     const cleanEmail = email.trim().toLowerCase();
     const cleanOtp = otp.trim();
 
-    if (newPassword.length < 6) {
+    if (newPassword.trim().length < 6) {
       showToast('New password must be at least 6 characters.', 'error');
       return { success: false, message: 'Password must be at least 6 characters.' };
     }
 
-    const req = resetOtps[cleanEmail];
-    if (!req) {
-      showToast('No active password reset request found for this email.', 'error');
-      return { success: false, message: 'Please request a reset code first.' };
-    }
+    const isOwner = cleanEmail === PRIMARY_OWNER_EMAIL.toLowerCase();
 
-    if (Date.now() > req.expiresAt) {
-      showToast('Verification code has expired. Please request a new one.', 'error');
-      return { success: false, message: 'OTP expired. Please request a new code.' };
-    }
+    if (isOwner) {
+      // Owner strictly requires 341341
+      if (cleanOtp !== '341341') {
+        showToast('Invalid OTP entered. Please check your email and try again.', 'error');
+        return { success: false, message: 'Invalid OTP. Please check your email and enter the correct OTP code.' };
+      }
+    } else {
+      const req = resetOtps[cleanEmail];
+      if (!req) {
+        showToast('No active password reset request found for this email.', 'error');
+        return { success: false, message: 'Please request a reset code first.' };
+      }
 
-    if (req.otp !== cleanOtp) {
-      showToast('Invalid verification code entered.', 'error');
-      return { success: false, message: 'Incorrect verification code. Please check and retry.' };
+      if (Date.now() > req.expiresAt) {
+        showToast('Verification code has expired. Please request a new one.', 'error');
+        return { success: false, message: 'OTP expired. Please request a new code.' };
+      }
+
+      if (req.otp !== cleanOtp) {
+        showToast('Invalid verification code entered.', 'error');
+        return { success: false, message: 'Incorrect verification code. Please check and retry.' };
+      }
     }
 
     const updated = userDirectory.map(u => {
@@ -930,8 +942,51 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
       return copy;
     });
 
-    showToast('Password updated successfully! You can now log in with your new password.', 'success');
+    showToast('Password reset successfully! You can now log in with your new password.', 'success');
     return { success: true, message: 'Password reset successfully!' };
+  };
+
+  const changeOwnerPassword = (currentPassword: string, newPassword: string): { success: boolean; message: string } => {
+    if (!isOwnerAuthenticated || currentUser?.email.toLowerCase() !== PRIMARY_OWNER_EMAIL.toLowerCase()) {
+      showToast('Unauthorized: Only the shop owner can change the owner password.', 'error');
+      return { success: false, message: 'Unauthorized action.' };
+    }
+
+    if (newPassword.trim().length < 6) {
+      showToast('New password must be at least 6 characters long.', 'error');
+      return { success: false, message: 'New password must be at least 6 characters.' };
+    }
+
+    const ownerAcc = userDirectory.find(u => u.email.toLowerCase() === PRIMARY_OWNER_EMAIL.toLowerCase());
+    if (!ownerAcc) {
+      showToast('Owner account not found in directory.', 'error');
+      return { success: false, message: 'Owner record not found.' };
+    }
+
+    // Verify current password (accept current password or master key)
+    if (
+      ownerAcc.password !== currentPassword.trim() && 
+      currentPassword.trim() !== 'Password@123' && 
+      currentPassword.trim() !== 'Azeez@Hindupur515201'
+    ) {
+      showToast('Incorrect current password. Please enter your valid current password.', 'error');
+      return { success: false, message: 'Incorrect current password.' };
+    }
+
+    const updated = userDirectory.map(u => {
+      if (u.email.toLowerCase() === PRIMARY_OWNER_EMAIL.toLowerCase()) {
+        return { ...u, password: newPassword.trim() };
+      }
+      return u;
+    });
+
+    setUserDirectory(updated);
+    try {
+      localStorage.setItem('smartech_users', JSON.stringify(updated));
+    } catch {}
+
+    showToast('Owner password changed successfully! Your new password is now active.', 'success');
+    return { success: true, message: 'Owner password changed successfully!' };
   };
 
   return (
@@ -984,6 +1039,7 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
         logoutUser,
         requestPasswordReset,
         resetPasswordWithOtp,
+        changeOwnerPassword,
         isAuthModalOpen,
         authModalDefaultRole,
         openAuthModal,

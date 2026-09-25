@@ -31,7 +31,9 @@ import {
   LogOut,
   X,
   Edit3,
-  ArrowRight
+  ArrowRight,
+  Lock,
+  KeyRound
 } from 'lucide-react';
 import OwnerLoginGate from '@/components/OwnerLoginGate';
 import ImageDropzone from '@/components/ImageDropzone';
@@ -61,12 +63,24 @@ export default function AdminPage() {
     updateServiceBooking,
     orders,
     updateOrderStatus,
+    changeOwnerPassword,
+    resetPasswordWithOtp,
+    requestPasswordReset,
     showToast 
   } = useShop();
 
-  const [activeTab, setActiveTab] = useState<'daily-price' | 'services' | 'add-product' | 'settings' | 'bulk'>('daily-price');
+  const [activeTab, setActiveTab] = useState<'daily-price' | 'services' | 'add-product' | 'settings' | 'security' | 'bulk'>('daily-price');
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
+
+  // Owner Password Management State
+  const [currentPass, setCurrentPass] = useState('');
+  const [newPass, setNewPass] = useState('');
+  const [confirmNewPass, setConfirmNewPass] = useState('');
+  const [showPassFields, setShowPassFields] = useState(false);
+  const [isChangingPass, setIsChangingPass] = useState(false);
+  const [isResetViaOtp, setIsResetViaOtp] = useState(false);
+  const [portalOtp, setPortalOtp] = useState('');
 
   // Inline edited values state for products: { [productId]: { price, stock, mrp, isNegotiable } }
   const [editState, setEditState] = useState<Record<string, { price: number; stock: number; mrp: number; isNegotiable: boolean }>>({});
@@ -315,6 +329,61 @@ export default function AdminPage() {
     updateShopSettings(settingsForm);
   };
 
+  // Handle Owner Password Change
+  const handleChangePasswordSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!currentPass.trim() || !newPass.trim() || !confirmNewPass.trim()) {
+      showToast('Please fill in all password fields.', 'error');
+      return;
+    }
+    if (newPass !== confirmNewPass) {
+      showToast('New passwords do not match.', 'error');
+      return;
+    }
+    if (newPass.length < 6) {
+      showToast('New password must be at least 6 characters long.', 'error');
+      return;
+    }
+
+    setIsChangingPass(true);
+    const res = changeOwnerPassword(currentPass, newPass);
+    setIsChangingPass(false);
+
+    if (res.success) {
+      setCurrentPass('');
+      setNewPass('');
+      setConfirmNewPass('');
+    }
+  };
+
+  // Handle Owner Password Reset via OTP (secret OTP 341341 for owner)
+  const handleResetViaOtpSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!portalOtp.trim() || !newPass.trim() || !confirmNewPass.trim()) {
+      showToast('Please enter the OTP and your new password.', 'error');
+      return;
+    }
+    if (newPass !== confirmNewPass) {
+      showToast('New passwords do not match.', 'error');
+      return;
+    }
+    if (newPass.length < 6) {
+      showToast('New password must be at least 6 characters long.', 'error');
+      return;
+    }
+
+    setIsChangingPass(true);
+    const res = resetPasswordWithOtp(currentUser?.email || 'azeez@smartechcomputers.com', portalOtp, newPass);
+    setIsChangingPass(false);
+
+    if (res.success) {
+      setPortalOtp('');
+      setNewPass('');
+      setConfirmNewPass('');
+      setIsResetViaOtp(false);
+    }
+  };
+
   // Security gate
   if (!isOwnerAuthenticated || currentUser?.email.toLowerCase() !== 'azeez@smartechcomputers.com') {
     return <OwnerLoginGate />;
@@ -339,7 +408,15 @@ export default function AdminPage() {
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <button 
+            onClick={() => setActiveTab('security')}
+            className="btn btn-sm btn-outline"
+            style={{ color: '#1e40af', borderColor: '#93c5fd', background: '#eff6ff', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+            title="Reset or Change Owner Password"
+          >
+            <Lock size={14} /> Change Password
+          </button>
           <button 
             onClick={resetToInitialProducts}
             className="btn btn-outline btn-sm"
@@ -502,6 +579,27 @@ export default function AdminPage() {
           }}
         >
           <Store size={16} /> 🏪 Shop Profile & Contact Details
+        </button>
+
+        <button
+          onClick={() => setActiveTab('security')}
+          style={{
+            padding: '12px 18px',
+            fontSize: '0.95rem',
+            fontWeight: 800,
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            color: activeTab === 'security' ? '#2563eb' : 'var(--gray-600)',
+            borderBottom: activeTab === 'security' ? '3px solid #2563eb' : '3px solid transparent',
+            marginBottom: '-2px',
+            whiteSpace: 'nowrap',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}
+        >
+          <Lock size={16} /> 🔐 Reset / Change Password
         </button>
 
         <button
@@ -1511,6 +1609,221 @@ export default function AdminPage() {
         </div>
       )}
 
+      {/* ============================================================== */}
+      {/* TAB 5: OWNER SECURITY & PASSWORD MANAGER                      */}
+      {/* ============================================================== */}
+      {activeTab === 'security' && (
+        <div className="admin-form-container" style={{ maxWidth: '640px', margin: '0 auto' }}>
+          <div className="admin-form-header" style={{ borderBottom: '1px solid var(--gray-200)', paddingBottom: '18px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+              <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Lock size={22} />
+              </div>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: 'var(--secondary)' }}>
+                  Owner Password & Security Manager
+                </h3>
+                <p style={{ margin: '2px 0 0', fontSize: '0.82rem', color: 'var(--gray-500)' }}>
+                  Reset or change your login password for Smartech Computers Owner Portal.
+                </p>
+              </div>
+            </div>
+            
+            <div style={{ background: '#f8fafc', padding: '12px 16px', borderRadius: '8px', border: '1px solid #e2e8f0', marginTop: '12px', fontSize: '0.85rem' }}>
+              <div><strong>Registered Owner Account:</strong> {currentUser?.email || 'azeez@smartechcomputers.com'}</div>
+              <div style={{ color: '#059669', fontWeight: 700, marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <CheckCircle2 size={14} /> Full Administrative Access Active
+              </div>
+            </div>
+          </div>
+
+          {/* Mode Switcher: Standard Password Change vs Forgot Password OTP Reset */}
+          <div style={{ display: 'flex', background: '#f1f5f9', padding: '4px', borderRadius: '8px', margin: '20px 0' }}>
+            <button
+              type="button"
+              onClick={() => setIsResetViaOtp(false)}
+              style={{
+                flex: 1,
+                padding: '8px 12px',
+                borderRadius: '6px',
+                border: 'none',
+                fontSize: '0.85rem',
+                fontWeight: 700,
+                background: !isResetViaOtp ? '#ffffff' : 'transparent',
+                color: !isResetViaOtp ? '#0f172a' : '#64748b',
+                boxShadow: !isResetViaOtp ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                cursor: 'pointer'
+              }}
+            >
+              Change Current Password
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsResetViaOtp(true)}
+              style={{
+                flex: 1,
+                padding: '8px 12px',
+                borderRadius: '6px',
+                border: 'none',
+                fontSize: '0.85rem',
+                fontWeight: 700,
+                background: isResetViaOtp ? '#ffffff' : 'transparent',
+                color: isResetViaOtp ? '#0f172a' : '#64748b',
+                boxShadow: isResetViaOtp ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                cursor: 'pointer'
+              }}
+            >
+              Reset via Email OTP
+            </button>
+          </div>
+
+          {/* Form 1: Standard Password Change */}
+          {!isResetViaOtp ? (
+            <form onSubmit={handleChangePasswordSubmit} className="admin-form" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div className="input-group">
+                <label className="input-label" style={{ fontWeight: 700 }}>
+                  Current Owner Password *
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type={showPassFields ? 'text' : 'password'}
+                    className="input"
+                    placeholder="Enter your current password"
+                    value={currentPass}
+                    onChange={(e) => setCurrentPass(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassFields(!showPassFields)}
+                    style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}
+                  >
+                    <Eye size={16} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="input-group">
+                <label className="input-label" style={{ fontWeight: 700 }}>
+                  New Password (minimum 6 characters) *
+                </label>
+                <input
+                  type={showPassFields ? 'text' : 'password'}
+                  className="input"
+                  placeholder="Enter new strong password"
+                  value={newPass}
+                  onChange={(e) => setNewPass(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="input-group">
+                <label className="input-label" style={{ fontWeight: 700 }}>
+                  Confirm New Password *
+                </label>
+                <input
+                  type={showPassFields ? 'text' : 'password'}
+                  className="input"
+                  placeholder="Repeat new password"
+                  value={confirmNewPass}
+                  onChange={(e) => setConfirmNewPass(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>
+                <button type="submit" disabled={isChangingPass} className="btn btn-primary btn-lg" style={{ flex: 1 }}>
+                  <Save size={18} /> {isChangingPass ? 'Updating...' : 'Update Owner Password'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsResetViaOtp(true)}
+                  className="btn btn-outline"
+                  style={{ fontSize: '0.85rem' }}
+                >
+                  Forgot Current Password?
+                </button>
+              </div>
+            </form>
+          ) : (
+            /* Form 2: Reset Password via Email OTP */
+            <form onSubmit={handleResetViaOtpSubmit} className="admin-form" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', padding: '12px 16px', fontSize: '0.85rem', color: '#166534' }}>
+                Click below to request an OTP verification code sent to your registered mail.
+              </div>
+
+              <div>
+                <button
+                  type="button"
+                  onClick={() => requestPasswordReset(currentUser?.email || 'azeez@smartechcomputers.com')}
+                  className="btn btn-sm btn-outline"
+                  style={{ borderColor: '#2563eb', color: '#2563eb', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                >
+                  <KeyRound size={14} /> Send OTP Verification Code to Mail
+                </button>
+              </div>
+
+              <div className="input-group">
+                <label className="input-label" style={{ fontWeight: 700 }}>
+                  6-Digit OTP Verification Code *
+                </label>
+                <input
+                  type="text"
+                  maxLength={6}
+                  className="input"
+                  placeholder="Enter 6-digit OTP code"
+                  value={portalOtp}
+                  onChange={(e) => setPortalOtp(e.target.value.replace(/\D/g, ''))}
+                  style={{ letterSpacing: '4px', fontSize: '1.1rem', fontWeight: 800 }}
+                  required
+                />
+              </div>
+
+              <div className="input-group">
+                <label className="input-label" style={{ fontWeight: 700 }}>
+                  New Password (minimum 6 characters) *
+                </label>
+                <input
+                  type={showPassFields ? 'text' : 'password'}
+                  className="input"
+                  placeholder="Enter new password"
+                  value={newPass}
+                  onChange={(e) => setNewPass(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="input-group">
+                <label className="input-label" style={{ fontWeight: 700 }}>
+                  Confirm New Password *
+                </label>
+                <input
+                  type={showPassFields ? 'text' : 'password'}
+                  className="input"
+                  placeholder="Repeat new password"
+                  value={confirmNewPass}
+                  onChange={(e) => setConfirmNewPass(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>
+                <button type="submit" disabled={isChangingPass} className="btn btn-primary btn-lg" style={{ flex: 1 }}>
+                  <Save size={18} /> {isChangingPass ? 'Resetting...' : 'Reset & Save New Password'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsResetViaOtp(false)}
+                  className="btn btn-outline"
+                  style={{ fontSize: '0.85rem' }}
+                >
+                  Back to Current Password
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
+      )}
 
       {/* ============================================================== */}
       {/* TAB 6: BULK DATA UPLOAD & INVENTORY IMPORT                     */}

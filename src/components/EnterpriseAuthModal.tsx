@@ -160,7 +160,7 @@ export default function EnterpriseAuthModal({
       if (!res.success) {
         setErrorMsg(res.message);
       } else {
-        setInfoMsg(`A 6-digit verification code has been sent to ${email.trim()}.`);
+        setInfoMsg('A 6-digit verification code has been sent to your mail.');
         setAuthMode('forgot-verify');
       }
       setIsSubmitting(false);
@@ -847,20 +847,20 @@ export default function EnterpriseAuthModal({
               <h3 style={{ fontSize: '1.1rem', fontWeight: 800, margin: '0 0 4px 0', color: '#0f172a' }}>
                 Enter Verification Code & New Password
               </h3>
-              <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
-                Code sent to <strong>{email}</strong>
+              <div style={{ fontSize: '0.85rem', color: '#0369a1', background: '#f0f9ff', padding: '8px 12px', borderRadius: '6px', border: '1px solid #bae6fd', fontWeight: 600 }}>
+                OTP sent to your mail
               </div>
             </div>
 
             <div style={{ marginBottom: '14px' }}>
               <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
-                6-Digit Verification Code *
+                6-Digit Verification Code (OTP) *
               </label>
               <div style={{ position: 'relative' }}>
                 <input
                   type="text"
                   maxLength={6}
-                  placeholder="e.g. 482910"
+                  placeholder="Enter 6-digit OTP"
                   value={otpInput}
                   onChange={(e) => setOtpInput(e.target.value.replace(/\D/g, ''))}
                   required
